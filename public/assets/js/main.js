@@ -41,9 +41,14 @@ document.getElementById("defaultOpen").click();
 
 function lexerCompile() {
     $.post("lexer", {"lexer": lexereditor.getValue()}, function(result) {
-        if (result["code"] == 1) {
-            console.log(1);
-            $("#LexerMessages").html("<b><p style=\"font-size:20px\">Compilation failed!</p><b>" + result["stderr"] + "<br>" + result["stdout"]);
+        if (result["code"] == 1)
+            $("#LexerMessages").html("<b><p style=\"font-size:20px\">Compilation failed!</p></b>" + result["stderr"] + "<br>" + result["stdout"]);
+        else {
+            $("#LexerMessages").html("<b><p style=\"font-size:20px\">Success!</p></b>Go to the next tab to see the FSM.");
+            var g = graphlibDot.read(result["stdout"])
+            
+            image = Viz(result["stdout"], { format: "png-image-element" });
+            $("#LexerVisual").prepend(image);
         }
     });
 }

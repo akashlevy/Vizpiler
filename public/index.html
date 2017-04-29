@@ -27,19 +27,19 @@
       <br>
       <div class="tabbox">
         <div class="tab">
-          <button class="tablinks" onclick="openTab(event, 'Lexer Theory')" id="defaultOpen">Lexer Theory</button>
-          <button class="tablinks" onclick="openTab(event, 'Lexer Code')">Lexer Code</button>
-          <button class="tablinks" onclick="openTab(event, 'Lexer Visual')">Lexer Visual</button>
-          <button class="tablinks" onclick="openTab(event, 'Parser Theory')">Parser Theory</button>
-          <button class="tablinks" onclick="openTab(event, 'Parser Code')">Parser Code</button>
-          <button class="tablinks" onclick="openTab(event, 'Parser Visual')">Parser Visual</button>
-          <button class="tablinks" onclick="openTab(event, 'AST Visual')">AST Visual</button>
+          <button class="tablinks" onclick="openTab(event, 'LexerTheory')" id="defaultOpen">Lexer Theory</button>
+          <button class="tablinks" onclick="openTab(event, 'LexerCode')">Lexer Code</button>
+          <button class="tablinks" onclick="openTab(event, 'LexerVisual')">Lexer Visual</button>
+          <button class="tablinks" onclick="openTab(event, 'ParserTheory')">Parser Theory</button>
+          <button class="tablinks" onclick="openTab(event, 'ParserCode')">Parser Code</button>
+          <button class="tablinks" onclick="openTab(event, 'ParserVisual')">Parser Visual</button>
+          <button class="tablinks" onclick="openTab(event, 'ASTVisual')">AST Visual</button>
           <button class="tablinks" onclick="openTab(event, 'Interpreter')">Interpreter</button>
         </div>
-        <div id="Lexer Code" class="codecontent">
+        <div id="LexerCode" class="codecontent">
           <table style="width:100%">
             <tr>
-              <td style="width:70%">
+              <td style="width:65%">
                 <textarea id="lexercode">
 %{
 #include <stdlib.h>
@@ -89,10 +89,10 @@ int yywrap(void) {
 }</textarea>
               </td>
               <td>
-                <div id="Lexer Compile" class="compilemsgcontent">
+                <div id="LexerCompile" class="compilemsgcontent">
                   <button onclick="lexerCompile();" style="width:100%">Compile</button>
                   <br><br>
-                  <div id="LexerMessages">
+                  <div id="LexerMessages" style="overflow-y:scroll">
                   Hello world! This should never be a problem in ideal circumstances.
                   </div>
                 </div>
@@ -100,7 +100,7 @@ int yywrap(void) {
             </tr>
           </table>
         </div>
-        <div id="Parser Code" class="codecontent">
+        <div id="ParserCode" class="codecontent">
           <textarea id="parsercode">
 %{
 #include <stdio.h>
@@ -273,23 +273,25 @@ int main(void) {
     return 0;
 }</textarea>
         </div>
-        <div id="Lexer Visual" class="tabcontent" style="text-align: center">
-          <img style="height: 100%" src="https://www.genivia.com/images/reflex-json-string.png"/>
+        <div id="LexerVisual" class="tabcontent" style="text-align: center">
+          <svg id="graphContainer">
+            <g/>
+          </svg>
         </div>
-        <div id="Parser Visual" class="tabcontent" style="text-align: center">
+        <div id="ParserVisual" class="tabcontent" style="text-align: center">
           <img style="height: 100%" src="https://www.gnu.org/software/bison/manual/html_node/figs/example.png"/>
         </div>
-        <div id="AST Visual" class="tabcontent">
+        <div id="ASTVisual" class="tabcontent">
           <img style="width: 100%" src="https://i.stack.imgur.com/AYA3S.png"/>
         </div>
         <div id="Interpreter" class="tabcontent">
           Code execution can be done here.
         </div>
-        <div id="Lexer Theory" class="tabcontent">
+        <div id="LexerTheory" class="tabcontent">
           <h3>Lexer Theory</h3>
           <p>Topics: How regexes work, how they are combined, how to build them, yacc</p>
         </div>
-        <div id="Parser Theory" class="tabcontent">
+        <div id="ParserTheory" class="tabcontent">
           <h3>Parser Theory</h3>
           <p>Topics: What different kinds of parsers exist, parsing algorithms, CFG, yacc</p>
         </div>
@@ -300,7 +302,8 @@ int main(void) {
     <script src='assets/js/jquery-3.2.1.min.js'></script>
     <script src='assets/js/tether.min.js'></script>
     <script src='assets/js/bootstrap.min.js'></script>
-    <script src='assets/js/graphlib-dot.min.js'></script>
+    <script src="assets/js/graphlib-dot.min.js"></script>
+    <script src="assets/js/viz.js"></script>
     <script src='assets/js/main.js'></script>
   </body>
 </html>
