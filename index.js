@@ -2,24 +2,30 @@
 var express = require('express');
 var app = express();
 
+
 // Use ANSI color code to HTML converter for stderr
 var Convert = require('ansi-to-html');
 var convert = new Convert();
 
+
 // Set port appropriately
 app.set('port', (process.env.PORT || 5000));
 
+
 // Use public folder to serve data
 app.use(express.static(__dirname + '/public'));
+
 
 // Use JSON as request body parser
 var bodyParser = require('body-parser');
 app.use(bodyParser.json())
 
+
 // Listen on port
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
+
 
 // Process lexer requests
 app.post('/lexer', function(req, res) {
@@ -41,4 +47,3 @@ app.post('/lexer', function(req, res) {
     res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
   });
 });
-
