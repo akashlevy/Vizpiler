@@ -18,6 +18,7 @@ app.use(express.static(__dirname + '/public'));
 
 // Use JSON as request body parser
 var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json())
 
 

@@ -37,7 +37,10 @@
           <button class="tablinks" onclick="openTab(event, 'Interpreter')">Interpreter</button>
         </div>
         <div id="Lexer Code" class="codecontent">
-          <textarea id="lexercode">
+          <table style="width:100%">
+            <tr>
+              <td style="width:70%">
+                <textarea id="lexercode">
 %{
 #include <stdlib.h>
 #include "calc3.h"
@@ -84,6 +87,18 @@ void yyerror(char *);
 int yywrap(void) {
     return 1;
 }</textarea>
+              </td>
+              <td>
+                <div id="Lexer Compile" class="compilemsgcontent">
+                  <button onclick="lexerCompile();" style="width:100%">Compile</button>
+                  <br><br>
+                  <div id="LexerMessages">
+                  Hello world! This should never be a problem in ideal circumstances.
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
         </div>
         <div id="Parser Code" class="codecontent">
           <textarea id="parsercode">
@@ -282,7 +297,7 @@ int main(void) {
     </div>
     <div class="footer navbar-fixed-bottom">
     <script src='assets/js/vanilla.js'></script>
-    <script src='assets/js/jquery-3.1.1.slim.min.js'></script>
+    <script src='assets/js/jquery-3.2.1.min.js'></script>
     <script src='assets/js/tether.min.js'></script>
     <script src='assets/js/bootstrap.min.js'></script>
     <script src='assets/js/graphlib-dot.min.js'></script>

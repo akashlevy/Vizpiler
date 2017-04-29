@@ -38,3 +38,12 @@ function openTab(evt, tabName) {
 
 // Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
+
+function lexerCompile() {
+    $.post("lexer", {"lexer": lexereditor.getValue()}, function(result) {
+        if (result["code"] == 1) {
+            console.log(1);
+            $("#LexerMessages").html("<b><p style=\"font-size:20px\">Compilation failed!</p><b>" + result["stderr"] + "<br>" + result["stdout"]);
+        }
+    });
+}
