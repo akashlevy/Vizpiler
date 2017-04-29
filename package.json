@@ -1,0 +1,26 @@
+{
+  "name": "vizpiler",
+  "version": "1.0.0",
+  "description": "An interactive visual tutorial on lexing/parsing in compilers",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "ejs": "2.3.3",
+    "express": "4.13.3"
+  },
+  "engines": {
+    "node": "0.12.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akashlevy/Vizpiler"
+  },
+  "keywords": [
+    "visual",
+    "compiler",
+    "tutorial"
+  ],
+  "license": "MIT"
+}
