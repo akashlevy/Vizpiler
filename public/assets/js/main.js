@@ -1,21 +1,12 @@
-requirejs.config({
-	//By default load any module IDs from js/lib
-	baseUrl: 'js',
-	//except, if the module ID starts with "app",
-	//load it from the js/app directory. paths
-	//config is relative to the baseUrl, and
-	//never includes a ".js" extension since
-	//the paths config could be for a directory.
-	paths: {
-		d3: '../bower_components/d3/d3',
-		"dot-checker": '../bower_components/graphviz-d3-renderer/dist/dot-checker',
-		"layout-worker": '../bower_components/graphviz-d3-renderer/dist/layout-worker',
-		worker: '../bower_components/requirejs-web-workers/src/worker',
-		renderer: '../bower_components/graphviz-d3-renderer/dist/renderer'
-	}
-});
-
 var lexereditor = CodeMirror.fromTextArea(lexercode,
+{
+    lineNumbers: true,
+    styleActiveLine: true,
+    matchBrackets: true,
+    mode: "text/x-c++src",
+    theme: "dracula"
+});
+var lexerinputeditor = CodeMirror.fromTextArea(lexerinput,
 {
     lineNumbers: true,
     styleActiveLine: true,
@@ -51,31 +42,24 @@ function openTab(evt, tabName) {
 
     lexereditor.refresh();
     parsereditor.refresh();
+    lexerinputeditor.refresh();
+    try { svgPanZoom('svg', {minZoom: 0.1, maxZoom: 1}); } catch(err){}
 }
 
 // Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
 
 function lexerCompile() {
+    $("#LexerMessages").html("<b><p style=\"font-size:20px\">Compiling...</p></b>");
     $.post("lexer", {"lexer": lexereditor.getValue()}, function(result) {
         if (result["code"] == 1)
             $("#LexerMessages").html("<b><p style=\"font-size:20px\">Compilation failed!</p></b>" + result["stderr"] + "<br>" + result["stdout"]);
         else {
             $("#LexerMessages").html("<b><p style=\"font-size:20px\">Success!</p></b>Go to the next tab to see the FSM.");
             var g = graphlibDot.read(result["stdout"])
-            
-            //image = Viz(result["stdout"], { format: "png-image-element" });
-            //$("#LexerVisual").prepend(image);
 
-            require(["renderer"], function (renderer) {
-                dotSource = result["stdout"];
-                // initialize svg stage. Have to get a return value from renderer.init 
-                //   to properly reset the image.
-                zoomFunc = renderer.init({element:"#LexerVisual", extend:[0.1, 10]});
-
-                // update stage with new dot source
-                renderer.render(dotSource);
-            });  
+            image = Viz(result["stdout"]);
+            $("#LexerVisualGraph").html(image);
         }
     });
 }

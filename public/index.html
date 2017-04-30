@@ -93,7 +93,7 @@ int yywrap(void) {
                   <button onclick="lexerCompile();" style="width:100%">Compile</button>
                   <br><br>
                   <div id="LexerMessages" style="overflow-y:scroll">
-                  Hello world! This should never be a problem in ideal circumstances.
+                  Enter the <i>flex</i> code you want to visualize and then compile it!
                   </div>
                 </div>
               </td>
@@ -273,12 +273,14 @@ int main(void) {
     return 0;
 }</textarea>
         </div>
-        <div id="LexerVisual" class="tabcontent" style="text-align: center; overflow: scroll;">
-          <!-- <svg id="graphContainer">
-            <g/>
-          </svg> -->
+        <div id="LexerVisual" class="tabcontent" style="padding: 5px 5px;">
+          <div id="LexerVisualGraph" style="float: left; width: 65%; height: 100%; outline: #555555 dotted; overflow:hidden"></div>
+          <div id="LexerInputCode" style="float: top; overflow: scroll; height: 50%; padding: 5px 10px; outline: #555555 dotted;">Input your test code here:
+            <div style="height: 90%"><textarea id="lexerinput">5+5</textarea></div>
+          </div>
+          <div style="word-wrap: break-word; word-wrap: break-all; float: top; overflow: scroll; height: 50%; padding: 10px 10px; outline: #555555 dotted;">Hello mama!</div>
         </div>
-        <div id="ParserVisual" class="tabcontent" style="text-align: center; overflow: scroll;">
+        <div id="ParserVisual" class="tabcontent">
           <img style="height: 100%" src="https://www.gnu.org/software/bison/manual/html_node/figs/example.png"/>
         </div>
         <div id="ASTVisual" class="tabcontent">
@@ -304,6 +306,7 @@ int main(void) {
     <script src='assets/js/bootstrap.min.js'></script>
     <script src="assets/js/graphlib-dot.min.js"></script>
     <script src="assets/js/viz.js"></script>
+    <script src="assets/js/svg-pan-zoom.min.js"></script>
     <script src='assets/js/require.js' data-main="assets/js/main"></script>
   </body>
 </html>

@@ -32,7 +32,7 @@ app.listen(app.get('port'), function() {
 app.post('/lexer', function(req, res) {
   // Spawn reflex process and input lexer data to it
   const spawn = require('child_process').spawn;
-  const lexer = spawn('reflex', ['--graphs-file=stdout']);
+  const lexer = spawn('reflex', ['--graphs-file=stdout', '-o', '/dev/null']);
   lexer.stdin.end(req.body['lexer']);
 
   // Create buffers for stdout and stderr data
