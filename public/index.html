@@ -275,10 +275,17 @@ int main(void) {
         </div>
         <div id="LexerVisual" class="tabcontent" style="padding: 5px 5px;">
           <div id="LexerVisualGraph" style="float: left; width: 65%; height: 100%; outline: #555555 dotted; overflow:hidden"></div>
-          <div id="LexerInputCode" style="float: top; overflow: scroll; height: 50%; padding: 5px 10px; outline: #555555 dotted;">Input your test code here:
-            <div style="height: 90%"><textarea id="lexerinput">5+5</textarea></div>
+          <div id="LexerInputCode" style="float: top; overflow: hidden; height: 50%; padding: 5px 10px; outline: #555555 dotted;">Input your test code here:
+            <div style="display: block; padding-bottom: 30px; height: 100%"><textarea id="lexerinput">a = 5+120</textarea></div>
+            <div style="top: 0; left: 0; height: 100%"></div>
           </div>
-          <div style="word-wrap: break-word; word-wrap: break-all; float: top; overflow: scroll; height: 50%; padding: 10px 10px; outline: #555555 dotted;">Hello mama!</div>
+          <div style="word-wrap: break-word; word-wrap: break-all; float: top; overflow: scroll; height: 50%; padding: 10px 10px; outline: #555555 dotted;">
+            <button id="startLexBut" onclick="startLexing();" style="width:33.33%; float:left;" disabled="true">Start Lexing</button>
+            <button id="stepLexBut" onclick="stepLexer(true);" style="width:33.33%; float:left;" disabled="true">Step Forward</button>
+            <button id="stepEndLexBut" onclick="stepEndLexer();" style="width:33.33%; float:top;" disabled="true">Step to End</button>
+            <div id="lexingOutput"></div>
+            <div id="lexingCodeOutput"></div>
+          </div>
         </div>
         <div id="ParserVisual" class="tabcontent">
           <img style="height: 100%" src="https://www.gnu.org/software/bison/manual/html_node/figs/example.png"/>

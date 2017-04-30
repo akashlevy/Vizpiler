@@ -1,0 +1,32 @@
+digraph COMMENT {
+		rankdir=LR;
+		concentrate=true;
+		node [fontname="ArialNarrow"];
+		edge [fontname="Courier"];
+
+		init [root=true,peripheries=0,label="COMMENT",fontname="Courier"];
+		init -> N0x7fff52c27250;
+
+/*START*/	N0x7fff52c27250 [label=""];
+		N0x7fff52c27250 -> N0x7f8b5a407ee0 [label="\\0-\\t"];
+		N0x7fff52c27250 -> N0x7f8b5a407d80 [label="\\n"];
+		N0x7fff52c27250 -> N0x7f8b5a407ee0 [label="\\v-)"];
+		N0x7fff52c27250 -> N0x7f8b5a407b30 [label="*"];
+		N0x7fff52c27250 -> N0x7f8b5a407ee0 [label="+-."];
+		N0x7fff52c27250 -> N0x7f8b5a4077f0 [label="/"];
+		N0x7fff52c27250 -> N0x7f8b5a407ee0 [label="0-\\xff"];
+
+/*ACCEPT 4*/	N0x7f8b5a4077f0 [label="[4]",peripheries=2];
+		N0x7f8b5a4077f0 -> N0x7f8b5a407c50 [label="*"];
+
+/*ACCEPT 4*/	N0x7f8b5a407b30 [label="[4]",peripheries=2];
+		N0x7f8b5a407b30 -> N0x7f8b5a407970 [label="/"];
+
+/*ACCEPT 3*/	N0x7f8b5a407d80 [label="[3]",peripheries=2];
+
+/*ACCEPT 4*/	N0x7f8b5a407ee0 [label="[4]",peripheries=2];
+
+/*ACCEPT 1*/	N0x7f8b5a407c50 [label="[1]",peripheries=2];
+
+/*ACCEPT 2*/	N0x7f8b5a407970 [label="[2]",peripheries=2];
+}

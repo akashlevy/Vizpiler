@@ -1,3 +1,6 @@
+var panZoomLex;
+
+// Define properties of CodeMirror editors
 var lexereditor = CodeMirror.fromTextArea(lexercode,
 {
     lineNumbers: true,
@@ -23,7 +26,9 @@ var parsereditor = CodeMirror.fromTextArea(parsercode,
     theme: "dracula"
 });
 
+// Show and hide tabs
 function openTab(evt, tabName) {
+    // Make tabs visible/invisible
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
@@ -40,26 +45,178 @@ function openTab(evt, tabName) {
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
 
+    // Refresh CodeMirror displays
     lexereditor.refresh();
     parsereditor.refresh();
     lexerinputeditor.refresh();
-    try { svgPanZoom('svg', {minZoom: 0.1, maxZoom: 1}); } catch(err){}
+
+    // Refresh graphs
+    try { panZoomLex = svgPanZoom('#LexerVisualGraph > svg', {minZoom: 0.1, maxZoom: 1}); } catch(err){}
 }
 
 // Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
 
+// Variables for the lex graph
+var lexGraph;
+var lexI;
+var lexText;
+var lexTokens;
+var lexState;
+var lexNextState;
+
+// Handle compiled code
 function lexerCompile() {
+    // Show "Compiling..."
     $("#LexerMessages").html("<b><p style=\"font-size:20px\">Compiling...</p></b>");
+
+    // Make request to server
     $.post("lexer", {"lexer": lexereditor.getValue()}, function(result) {
-        if (result["code"] == 1)
+        // If failure, display failure message
+        if (result["code"] != 0)
             $("#LexerMessages").html("<b><p style=\"font-size:20px\">Compilation failed!</p></b>" + result["stderr"] + "<br>" + result["stdout"]);
+        // If success, display "Success!" and render/process graph
         else {
             $("#LexerMessages").html("<b><p style=\"font-size:20px\">Success!</p></b>Go to the next tab to see the FSM.");
-            var g = graphlibDot.read(result["stdout"])
-
+            lexGraph = graphlibDot.read(result["stdout"])
             image = Viz(result["stdout"]);
             $("#LexerVisualGraph").html(image);
+            $("#startLexBut").attr("disabled", false);
         }
     });
+}
+
+// Start lexical analyzer in browser
+function startLexing() {
+    // Change start button to stop button
+    $startbut = $("#startLexBut");
+    $startbut.text('Stop Lexing');
+    $startbut.attr("onclick", "stopLexing();");
+        
+    // Enable step buttons
+    $("#stepLexBut").attr("disabled", false);
+    $("#stepEndLexBut").attr("disabled", false);
+
+    // Initialize lexing variables
+    lexI = -1;
+    lexText = lexerinputeditor.getValue();
+    lexTokens = [];
+    lexState = "init";
+    lexNextState = lexGraph.outEdges(lexState)[0].w;
+
+    // Do special stepLexer step
+    stepLexer(true);
+}
+
+// Stop lexical analyzer
+function stopLexing() {
+    // Change stop button to start button
+    $startbut = $("#startLexBut");
+    $startbut.text("Start Lexing");
+    $startbut.attr("onclick", "startLexing();");
+
+    // Disable step buttons
+    $("#stepLexBut").attr("disabled", true);
+    $("#stepEndLexBut").attr("disabled", true);
+
+    // Clear text
+    $("#lexingOutput").html("");
+    $("#lexingCodeOutput").text("");
+
+    // Reset graph to original
+    pan = panZoomLex.getPan();
+    zoom = panZoomLex.getZoom();
+    $graph = $(Viz(graphlibDot.write(lexGraph)));
+    $graph.attr("visibility", "hidden")
+    $(function() {
+        $("#LexerVisualGraph").html($graph);
+    });
+    $(function() {
+        panZoomLex = svgPanZoom('#LexerVisualGraph > svg', {minZoom: 0.1, maxZoom: 1});
+        panZoomLex.zoom(zoom);
+        panZoomLex.pan(pan);
+    });
+    $(function() {
+        $('#LexerVisualGraph > svg').attr('visibility', 'visible');
+    });
+}
+
+// Run the lexer on one character
+function stepLexer(graphit) {
+    // If done, don't do anything
+    if (lexState == "error" || lexI == lexText.length) return;
+
+    // Increment the character processed and update the state
+    lexI++;
+    lexState = lexNextState;
+
+    // Highlight the graph
+    if (graphit) {
+        lexModGraph = jQuery.extend(true, {}, lexGraph);
+        lexModGraph.node(lexState).style = "filled";
+        lexModGraph.node(lexState).fillcolor = "red";
+        pan = panZoomLex.getPan();
+        zoom = panZoomLex.getZoom();
+        $graph = $(Viz(graphlibDot.write(lexModGraph)));
+        $graph.attr("visibility", "hidden")
+        $(function() {
+            $("#LexerVisualGraph").html($graph);
+        });
+        $(function() {
+            panZoomLex = svgPanZoom('#LexerVisualGraph > svg', {minZoom: 0.1, maxZoom: 1});
+            panZoomLex.zoom(zoom);
+            panZoomLex.pan(pan);
+        });
+        $(function() {
+            $('#LexerVisualGraph > svg').attr('visibility', 'visible');
+        });
+    }
+
+    // Compute next state
+    var nextchar = lexText[lexI];
+    lexNextState = null;
+    var outedges = lexGraph.outEdges(lexState);
+    for (i in outedges) {
+        edgeLabel = lexGraph.edge(outedges[i]).label;
+        var re = new RegExp('[' + eval("'" + edgeLabel.replace("'","\\'") + "'") + ']');
+        if (re.exec(nextchar)) {
+            lexNextState = outedges[i].w;
+            break;
+        }
+    }
+
+    // Output the relevant information
+    if (lexI >= lexText.length) curchar = "EOF";
+    else curchar = lexText[lexI];
+    htmlOut = "<b>Current character:</b> '" + curchar + "'<br>\n";
+
+    // If no next state, update state
+    if (lexNextState == null) {
+        if (lexGraph.node(lexState).peripheries == 2) {
+            lexTokens.push(lexGraph.node(lexState).label);
+            lexNextState = lexGraph.outEdges("init")[0].w;
+            lexI--;
+            nextStateStr = "";
+        }
+        // If state is bad, signal error
+        else {
+            lexTokens.push("ERROR");
+            lexNextState = "error";
+            nextStateStr = "ERROR";
+        }
+    }
+    else nextStateStr = lexGraph.node(lexNextState).label;
+
+    // Output the rest of the relevant information
+    htmlOut += "<b>Current state:</b> " + lexGraph.node(lexState).label + "<br>\n";
+    htmlOut += "<b>Next state:</b> " + nextStateStr + "<br>\n";
+    htmlOut += "<b>Tokens out:</b> " + lexTokens.join(" ") + "<br>\n";
+    htmlOut += "<b>Code:</b><br>\n";
+    $("#lexingOutput").html(htmlOut);
+    $("#lexingCodeOutput").text(lexText);
+}
+
+// Run step lexer to the end of the string
+function stepEndLexer() {
+    while (lexI < lexText.length) stepLexer(false);
 }
