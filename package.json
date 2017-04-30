@@ -3,24 +3,33 @@
   "version": "1.0.0",
   "description": "An interactive visual tutorial on lexing/parsing in compilers",
   "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
+  "directories": {
+    "example": "examples"
   },
   "dependencies": {
-    "ejs": "2.3.3",
-    "express": "4.13.3"
+    "body-parser": "^1.17.1",
+    "ansi-to-html": "^0.6.0",
+    "csrf": "^3.0.6",
+    "express": "^4.13.3",
+    "graphlib-dot": "^0.6.2"
   },
-  "engines": {
-    "node": "0.12.7"
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/akashlevy/Vizpiler"
+    "url": "git+https://github.com/akashlevy/Vizpiler.git"
   },
   "keywords": [
     "visual",
-    "compiler",
+    "compilers",
     "tutorial"
   ],
-  "license": "MIT"
+  "author": "Akash Levy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/akashlevy/Vizpiler/issues"
+  },
+  "homepage": "https://github.com/akashlevy/Vizpiler#readme"
 }

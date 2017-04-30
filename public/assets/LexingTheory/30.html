@@ -1,0 +1,383 @@
+<!DOCTYPE html >
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta charset="utf-8" />
+</head>
+
+<body style="margin: 0;">
+
+<div id="p30" style="overflow: hidden; position: relative; width: 818px; height: 1066px;">
+<script type=text/javascript>
+	function toggleAnnotation(id){
+	   var annotation = document.getElementById(id).style;
+	   annotation.visibility = annotation.visibility === 'hidden' ? 'visible' : 'hidden';
+	}
+	var lastDragged;
+	function Draggable(element){
+		this.element=element;
+		this.offsets={};
+		this.mousePos={};
+		this.isMoving=false;
+		this.newPos={};
+		this.html=document.getElementsByTagName("html").item(0);
+		this.isTouch='ontouchstart' in window;
+		var self=this;
+		this.element.onmousemove=null;
+		if(this.html.addEventListener){
+			if(this.isTouch){
+				this.element.addEventListener("touchstart", moveStart);
+				this.html.addEventListener("touchmove", movePopup);
+				this.html.addEventListener("touchend", releaseAnnot);
+				try{moveStart(event);}catch(ex){}
+			}else{
+				this.element.addEventListener("mousedown", moveStart);
+				this.html.addEventListener("mousemove", movePopup);
+				this.html.addEventListener("mouseup", releaseAnnot);
+			}
+		}else if(this.html.attachEvent){
+			this.html.attachEvent("onmousedown", moveStart);
+			this.html.attachEvent("onmousemove", movePopup);
+			this.html.attachEvent("onmouseup", releaseAnnot);
+		}
+
+		function moveStart(event){
+			event = event || window.event;
+			self.isMoving = true;
+			self.mousePos.x=event.clientX || event.touches[0].pageX;
+			self.mousePos.y=event.clientY || event.touches[0].pageY;
+			self.offsets.left=self.element.parentNode.offsetLeft;
+			self.offsets.top=self.element.parentNode.offsetTop;
+			self.newPos.left=self.offsets.left;
+			self.newPos.top=self.offsets.top;
+			self.element.parentNode.style.zIndex=5;
+			if(lastDragged)
+				lastDragged.style.zIndex=4;
+		}
+
+		function releaseAnnot(event){
+			self.isMoving=false;
+			lastDragged=self.element.parentNode;
+		}
+
+		function movePopup(event){
+			if(self.isMoving === false)
+				return;
+			(event.preventDefault) ? event.preventDefault() : event.returnValue = false;
+			event = event || window.event;			
+			self.newPos.left=(event.clientX || event.touches[0].pageX) - self.mousePos.x + self.offsets.left;
+			self.newPos.top =(event.clientY || event.touches[0].pageY) - self.mousePos.y + self.offsets.top;
+			self.element.parentNode.style.top = self.newPos.top+"px";
+			self.element.parentNode.style.left = self.newPos.left+"px";
+		}
+
+		element.onclick =function(event){
+			if(self.offsets.left === self.newPos.left && self.newPos.top === self.offsets.top){
+				toggleAnnotation(self.element.parentNode.id);
+				self.isMoving=false;
+			}
+		}
+	}
+</script>
+
+
+
+<!-- Begin shared CSS values -->
+<style class="shared-css" type="text/css" >
+.t {
+	-webkit-transform-origin: top left;
+	-moz-transform-origin: top left;
+	-o-transform-origin: top left;
+	-ms-transform-origin: top left;
+	-webkit-transform: scale(0.25);
+	-moz-transform: scale(0.25);
+	-o-transform: scale(0.25);
+	-ms-transform: scale(0.25);
+	z-index: 2;
+	position: absolute;
+	white-space: pre;
+	overflow: visible;
+}
+</style>
+<!-- End shared CSS values -->
+
+
+<!-- Begin inline CSS -->
+<style type="text/css" >
+
+#t1_30{left:207px;top:87px;letter-spacing:-0.1px;word-spacing:1.5px;}
+#t2_30{left:207px;top:159px;letter-spacing:-0.3px;word-spacing:1.3px;}
+#t3_30{left:207px;top:181px;letter-spacing:-0.3px;word-spacing:2.6px;}
+#t4_30{left:207px;top:203px;letter-spacing:-0.4px;word-spacing:1px;}
+#t5_30{left:225px;top:223px;letter-spacing:-0.3px;word-spacing:1.2px;}
+#t6_30{left:250px;top:276px;}
+#t7_30{left:250px;top:282px;}
+#t8_30{left:250px;top:289px;}
+#t9_30{left:265px;top:289px;letter-spacing:-0.3px;word-spacing:0.8px;}
+#ta_30{left:225px;top:305px;word-spacing:-0.7px;}
+#tb_30{left:225px;top:322px;}
+#tc_30{left:225px;top:339px;}
+#td_30{left:357px;top:339px;word-spacing:-0.7px;}
+#te_30{left:225px;top:355px;word-spacing:-1.7px;}
+#tf_30{left:225px;top:372px;}
+#tg_30{left:357px;top:372px;word-spacing:-0.7px;}
+#th_30{left:225px;top:389px;}
+#ti_30{left:357px;top:389px;word-spacing:-1.5px;}
+#tj_30{left:225px;top:406px;}
+#tk_30{left:357px;top:406px;word-spacing:-0.7px;}
+#tl_30{left:225px;top:423px;}
+#tm_30{left:357px;top:423px;}
+#tn_30{left:225px;top:439px;}
+#to_30{left:357px;top:439px;word-spacing:-1.1px;}
+#tp_30{left:207px;top:493px;letter-spacing:-0.3px;}
+#tq_30{left:252px;top:497px;letter-spacing:2.8px;}
+#tr_30{left:311px;top:493px;letter-spacing:-0.3px;word-spacing:1.8px;}
+#ts_30{left:207px;top:515px;letter-spacing:-0.3px;word-spacing:1.8px;}
+#tt_30{left:655px;top:517px;}
+#tu_30{left:207px;top:537px;letter-spacing:-0.3px;word-spacing:1.1px;}
+#tv_30{left:225px;top:559px;letter-spacing:-0.3px;word-spacing:4.7px;}
+#tw_30{left:207px;top:581px;letter-spacing:-0.3px;word-spacing:1.3px;}
+#tx_30{left:79px;top:625px;word-spacing:-6.8px;}
+#ty_30{left:207px;top:625px;letter-spacing:-0.7px;word-spacing:1.9px;}
+#tz_30{left:207px;top:648px;letter-spacing:-0.3px;word-spacing:0.9px;}
+#t10_30{left:207px;top:670px;letter-spacing:-0.4px;word-spacing:1.4px;}
+#t11_30{left:225px;top:692px;letter-spacing:-0.3px;word-spacing:2.2px;}
+#t12_30{left:207px;top:714px;letter-spacing:-0.3px;word-spacing:-1.5px;}
+#t13_30{left:207px;top:736px;letter-spacing:-0.5px;word-spacing:3.5px;}
+#t14_30{left:207px;top:759px;}
+#t15_30{left:321px;top:758px;letter-spacing:-0.3px;word-spacing:1px;}
+#t16_30{left:225px;top:778px;letter-spacing:-0.2px;word-spacing:2px;}
+#t17_30{left:331px;top:779px;}
+#t18_30{left:417px;top:778px;letter-spacing:-0.3px;word-spacing:2.3px;}
+#t19_30{left:207px;top:797px;letter-spacing:-0.4px;word-spacing:1.5px;}
+#t1a_30{left:207px;top:840px;}
+#t1b_30{left:225px;top:840px;word-spacing:-0.6px;}
+#t1c_30{left:207px;top:860px;}
+#t1d_30{left:225px;top:860px;word-spacing:-0.6px;}
+#t1e_30{left:207px;top:880px;}
+#t1f_30{left:225px;top:880px;letter-spacing:0.1px;word-spacing:-0.1px;}
+#t1g_30{left:207px;top:900px;}
+#t1h_30{left:225px;top:900px;word-spacing:-0.5px;}
+#t1i_30{left:207px;top:919px;}
+#t1j_30{left:225px;top:919px;letter-spacing:-0.1px;word-spacing:-0.7px;}
+#t1k_30{left:699px;top:983px;letter-spacing:-0.2px;}
+
+.s1_30{
+	FONT-SIZE: 55px;
+	FONT-FAMILY: Gn_1v;
+	color: rgb(35,31,32);
+}
+
+.s2_30{
+	FONT-SIZE: 66.9px;
+	FONT-FAMILY: Times-Roman_1y;
+	color: rgb(35,31,32);
+}
+
+.s3_30{
+	FONT-SIZE: 55px;
+	FONT-FAMILY: F2_2n;
+	color: rgb(35,31,32);
+}
+
+.s4_30{
+	FONT-SIZE: 55px;
+	FONT-FAMILY: Times-Italic_2b;
+	color: rgb(35,31,32);
+}
+
+.s5_30{
+	FONT-SIZE: 55px;
+	FONT-FAMILY: Courier_2a;
+	color: rgb(35,31,32);
+}
+
+.s6_30{
+	FONT-SIZE: 53.5px;
+	FONT-FAMILY: Times-Roman_1y;
+	color: rgb(35,31,32);
+}
+
+.s7_30{
+	FONT-SIZE: 61.1px;
+	FONT-FAMILY: Courier_2a;
+	color: rgb(35,31,32);
+}
+
+.s8_30{
+	FONT-SIZE: 73.3px;
+	FONT-FAMILY: Gn_1v;
+	color: rgb(35,31,32);
+}
+
+.s9_30{
+	FONT-SIZE: 64.2px;
+	FONT-FAMILY: Gr_2k;
+	color: rgb(35,31,32);
+}
+
+.s10_30{
+	FONT-SIZE: 64.2px;
+	FONT-FAMILY: Times-Roman_1y;
+	color: rgb(35,31,32);
+}
+
+.s11_30{
+	FONT-SIZE: 70.3px;
+	FONT-FAMILY: Gn_1v;
+	color: rgb(35,31,32);
+}
+
+#form1_30{	z-index:2;	border-style:none;	position: absolute;	left:78px;	top:628px;	width:110px;	height:22px;	text-align:left;	background: transparent;	background-image: url("30/form/203 0 ROff.png");	background-repeat: no-repeat;	font:normal 16px Arial, Helvetica, sans-serif;}
+#popup_202_0_R{top: 614px;left: 286.0574px;}
+.annotPopup{position: absolute;background-color:#FFFF99;border: 2px solid black;font-family:sans-serif;font-size:14px;z-index:2;width:200px;}
+.annotDragbar{overflow:auto; border-bottom:1px solid black; background-color:#aaa659; height:20px; cursor:move;}
+.annotHeader{border-bottom:1px solid black;}
+#popup_203_0_R{top: 424px;left: 286.1774px;}
+#form2_30{	z-index:2;	border-style:none;	position: absolute;	left:206px;	top:628px;	width:514px;	height:312px;	text-align:left;	background: transparent;	background-image: url("30/form/202 0 ROff.png");	background-repeat: no-repeat;	font:normal 249px Arial, Helvetica, sans-serif;}
+
+</style>
+<!-- End inline CSS -->
+
+<!-- Begin embedded font definitions -->
+<style id="fonts30" type="text/css" >
+
+@font-face {
+	font-family: Gr_2k;
+	src: url("fonts/Gr_2k.woff") format("woff");
+}
+
+@font-face {
+	font-family: Times-Roman_1y;
+	src: url("fonts/Times-Roman_1y.woff") format("woff");
+}
+
+@font-face {
+	font-family: Courier_2a;
+	src: url("fonts/Courier_2a.woff") format("woff");
+}
+
+@font-face {
+	font-family: Gn_1v;
+	src: url("fonts/Gn_1v.woff") format("woff");
+}
+
+@font-face {
+	font-family: F2_2n;
+	src: url("fonts/F2_2n.woff") format("woff");
+}
+
+@font-face {
+	font-family: Times-Italic_2b;
+	src: url("fonts/Times-Italic_2b.woff") format("woff");
+}
+
+</style>
+<!-- End embedded font definitions -->
+
+<!-- Begin page background -->
+<div id="pg30Overlay" style="width:100%; height:100%; position:absolute; z-index:1; background-color:rgba(0,0,0,0); -webkit-user-select: none;"></div>
+<div id="pg30" style="-webkit-user-select: none;"><object width="818" height="1066" data="30/30.svg" type="image/svg+xml" id="pdf30" style="width:818px; height:1066px; background-color:white; -moz-transform:scale(1); z-index: 0;"></object></div>
+<!-- End page background -->
+
+
+<!-- Begin text definitions (Positioned/styled in CSS) -->
+<div id="t1_30" class="t s1_30">PROGRAMMING EXERCISE</div>
+<div id="t2_30" class="t s2_30">Though it is possible to write a single regular expression that matches an en-</div>
+<div id="t3_30" class="t s2_30">tire comment, as comments get more complicated it becomes more difﬁcult,</div>
+<div id="t4_30" class="t s2_30">or even impossible if nested comments are allowed.</div>
+<div id="t5_30" class="t s2_30">The Lex speciﬁcation corresponding to this machine is</div>
+<div id="t6_30" class="t s3_30">.</div>
+<div id="t7_30" class="t s3_30">.</div>
+<div id="t8_30" class="t s3_30">.</div>
+<div id="t9_30" class="t s4_30">the usual preamble ...</div>
+<div id="ta_30" class="t s5_30">%Start INITIAL COMMENT</div>
+<div id="tb_30" class="t s5_30">%%</div>
+<div id="tc_30" class="t s5_30">&lt;INITIAL&gt;if</div>
+<div id="td_30" class="t s5_30">{ADJ; return IF;}</div>
+<div id="te_30" class="t s5_30">&lt;INITIAL&gt;[a-z]+ {ADJ; yylval.sval=String(yytext); return ID;}</div>
+<div id="tf_30" class="t s5_30">&lt;INITIAL&gt;"(*"</div>
+<div id="tg_30" class="t s5_30">{ADJ; BEGIN COMMENT;}</div>
+<div id="th_30" class="t s5_30">&lt;INITIAL&gt;.</div>
+<div id="ti_30" class="t s5_30">{ADJ; EM_error("illegal character");}</div>
+<div id="tj_30" class="t s5_30">&lt;COMMENT&gt;"*)"</div>
+<div id="tk_30" class="t s5_30">{ADJ; BEGIN INITIAL;}</div>
+<div id="tl_30" class="t s5_30">&lt;COMMENT&gt;.</div>
+<div id="tm_30" class="t s5_30">{ADJ;}</div>
+<div id="tn_30" class="t s5_30">.</div>
+<div id="to_30" class="t s5_30">{BEGIN INITIAL; yyless(1);}</div>
+<div id="tp_30" class="t s2_30">where</div>
+<div id="tq_30" class="t s6_30">INITIAL</div>
+<div id="tr_30" class="t s2_30">is the “outside of any comment” state. The last rule is a hack</div>
+<div id="ts_30" class="t s2_30">to get Lex into this state. Any regular expression not preﬁxed by a</div>
+<div id="tt_30" class="t s7_30">&lt;STATE&gt;</div>
+<div id="tu_30" class="t s2_30">operates in all states; this feature is rarely useful.</div>
+<div id="tv_30" class="t s2_30">This example can be easily augmented to handle nested comments, via a</div>
+<div id="tw_30" class="t s2_30">global variable that is incremented and decremented in the semantic actions.</div>
+<div id="tx_30" class="t s8_30">P R O G R A M</div>
+<div id="ty_30" class="t s8_30">LEXICAL ANALYSIS</div>
+<div id="tz_30" class="t s2_30">Use Lex to implement a lexical analyzer for the Tiger language. Appendix A</div>
+<div id="t10_30" class="t s2_30">describes, among other things, the lexical tokens of Tiger.</div>
+<div id="t11_30" class="t s2_30">This chapter has left out some of the speciﬁcs of how the lexical analyzer</div>
+<div id="t12_30" class="t s2_30">should be initialized and how it should communicate with the rest of the com-</div>
+<div id="t13_30" class="t s2_30">piler. You can learn this from the Lex manual, but the “skeleton” ﬁles in the</div>
+<div id="t14_30" class="t s7_30">$TIGER/chap2</div>
+<div id="t15_30" class="t s2_30">directory will also help get you started.</div>
+<div id="t16_30" class="t s2_30">Along with the</div>
+<div id="t17_30" class="t s7_30">tiger.lex</div>
+<div id="t18_30" class="t s2_30">ﬁle you should turn in documentation for the</div>
+<div id="t19_30" class="t s2_30">following points:</div>
+<div id="t1a_30" class="t s9_30">•</div>
+<div id="t1b_30" class="t s10_30">how you handle comments;</div>
+<div id="t1c_30" class="t s9_30">•</div>
+<div id="t1d_30" class="t s10_30">how you handle strings;</div>
+<div id="t1e_30" class="t s9_30">•</div>
+<div id="t1f_30" class="t s10_30">error handling;</div>
+<div id="t1g_30" class="t s9_30">•</div>
+<div id="t1h_30" class="t s10_30">end-of-ﬁle handling;</div>
+<div id="t1i_30" class="t s9_30">•</div>
+<div id="t1j_30" class="t s10_30">other interesting features of your lexer.</div>
+<div id="t1k_30" class="t s11_30">33</div>
+
+<!-- End text definitions -->
+
+
+<!-- Begin Form Data -->
+<form>
+<input type="button"  tabindex="2"  id="form1_30" data-objref="203 0 R" onclick="toggleAnnotation('popup_203_0_R');"/>
+<div style='visibility:hidden;' id="popup_202_0_R" class='annotPopup'>
+  <div class="annotDragbar" onmousemove="new Draggable(this);" ontouchstart="new Draggable(this);" title="Press to minimise"></div>	<div class='annotHeader'>
+		<br/>
+		<br/>
+		30/04/2017 22:35:50 GMT<br/>
+	</div>
+	<div class='annotContent'></div>
+</div>
+<div style='visibility:hidden;' id="popup_203_0_R" class='annotPopup'>
+  <div class="annotDragbar" onmousemove="new Draggable(this);" ontouchstart="new Draggable(this);" title="Press to minimise"></div>	<div class='annotHeader'>
+		<br/>
+		<br/>
+		30/04/2017 22:36:15 GMT<br/>
+	</div>
+	<div class='annotContent'></div>
+</div>
+<input type="button"  tabindex="1"  id="form2_30" data-objref="202 0 R" onclick="toggleAnnotation('popup_202_0_R');"/>
+
+</form>
+<!-- End Form Data -->
+<!--[if lt IE 9]><script type="text/javascript">
+(function(divCount, pageNum) {
+for (var i = 1; i < divCount; i++) {
+    var div = document.getElementById('t' + i.toString(36) + '_' + pageNum);
+    if (div !== null) {
+        div.style.top = (div.offsetTop * 4) + 'px';
+        div.style.left = (div.offsetLeft * 4) + 'px';
+        div.style.zoom = '25%';
+    }
+}
+})(57, 30);
+</script><![endif]-->
+
+</div>
+</body>
+</html>

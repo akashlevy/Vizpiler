@@ -1,0 +1,273 @@
+<!DOCTYPE html >
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta charset="utf-8" />
+</head>
+
+<body style="margin: 0;">
+
+<div id="p12" style="overflow: hidden; position: relative; width: 935px; height: 1210px;">
+<script type=text/javascript>
+	function toggleAnnotation(id){
+	   var annotation = document.getElementById(id).style;
+	   annotation.visibility = annotation.visibility === 'hidden' ? 'visible' : 'hidden';
+	}
+	var lastDragged;
+	function Draggable(element){
+		this.element=element;
+		this.offsets={};
+		this.mousePos={};
+		this.isMoving=false;
+		this.newPos={};
+		this.html=document.getElementsByTagName("html").item(0);
+		this.isTouch='ontouchstart' in window;
+		var self=this;
+		this.element.onmousemove=null;
+		if(this.html.addEventListener){
+			if(this.isTouch){
+				this.element.addEventListener("touchstart", moveStart);
+				this.html.addEventListener("touchmove", movePopup);
+				this.html.addEventListener("touchend", releaseAnnot);
+				try{moveStart(event);}catch(ex){}
+			}else{
+				this.element.addEventListener("mousedown", moveStart);
+				this.html.addEventListener("mousemove", movePopup);
+				this.html.addEventListener("mouseup", releaseAnnot);
+			}
+		}else if(this.html.attachEvent){
+			this.html.attachEvent("onmousedown", moveStart);
+			this.html.attachEvent("onmousemove", movePopup);
+			this.html.attachEvent("onmouseup", releaseAnnot);
+		}
+
+		function moveStart(event){
+			event = event || window.event;
+			self.isMoving = true;
+			self.mousePos.x=event.clientX || event.touches[0].pageX;
+			self.mousePos.y=event.clientY || event.touches[0].pageY;
+			self.offsets.left=self.element.parentNode.offsetLeft;
+			self.offsets.top=self.element.parentNode.offsetTop;
+			self.newPos.left=self.offsets.left;
+			self.newPos.top=self.offsets.top;
+			self.element.parentNode.style.zIndex=5;
+			if(lastDragged)
+				lastDragged.style.zIndex=4;
+		}
+
+		function releaseAnnot(event){
+			self.isMoving=false;
+			lastDragged=self.element.parentNode;
+		}
+
+		function movePopup(event){
+			if(self.isMoving === false)
+				return;
+			(event.preventDefault) ? event.preventDefault() : event.returnValue = false;
+			event = event || window.event;			
+			self.newPos.left=(event.clientX || event.touches[0].pageX) - self.mousePos.x + self.offsets.left;
+			self.newPos.top =(event.clientY || event.touches[0].pageY) - self.mousePos.y + self.offsets.top;
+			self.element.parentNode.style.top = self.newPos.top+"px";
+			self.element.parentNode.style.left = self.newPos.left+"px";
+		}
+
+		element.onclick =function(event){
+			if(self.offsets.left === self.newPos.left && self.newPos.top === self.offsets.top){
+				toggleAnnotation(self.element.parentNode.id);
+				self.isMoving=false;
+			}
+		}
+	}
+</script>
+
+
+
+<!-- Begin shared CSS values -->
+<style class="shared-css" type="text/css" >
+.t {
+	-webkit-transform-origin: top left;
+	-moz-transform-origin: top left;
+	-o-transform-origin: top left;
+	-ms-transform-origin: top left;
+	-webkit-transform: scale(0.25);
+	-moz-transform: scale(0.25);
+	-o-transform: scale(0.25);
+	-ms-transform: scale(0.25);
+	z-index: 2;
+	position: absolute;
+	white-space: pre;
+	overflow: visible;
+}
+</style>
+<!-- End shared CSS values -->
+
+
+<!-- Begin inline CSS -->
+<style type="text/css" >
+
+#t1_12{left:459px;top:1136px;letter-spacing:-0.1px;}
+#t2_12{left:238px;top:107px;letter-spacing:0.1px;}
+#t3_12{left:238px;top:125px;letter-spacing:0.1px;}
+#t4_12{left:202px;top:142px;letter-spacing:0.2px;}
+#t5_12{left:202px;top:159px;letter-spacing:0.1px;}
+#t6_12{left:202px;top:177px;letter-spacing:0.1px;}
+#t7_12{left:165px;top:194px;letter-spacing:0.1px;}
+#t8_12{left:202px;top:211px;letter-spacing:0.1px;}
+#t9_12{left:202px;top:229px;letter-spacing:0.1px;}
+#ta_12{left:165px;top:246px;letter-spacing:0.1px;}
+#tb_12{left:165px;top:263px;letter-spacing:0.1px;}
+#tc_12{left:165px;top:298px;letter-spacing:0.1px;}
+#td_12{left:165px;top:332px;letter-spacing:0.1px;}
+#te_12{left:275px;top:332px;letter-spacing:0.1px;}
+#tf_12{left:312px;top:350px;letter-spacing:0.1px;}
+#tg_12{left:312px;top:367px;letter-spacing:0.1px;}
+#th_12{left:275px;top:384px;letter-spacing:0.4px;}
+#ti_12{left:165px;top:419px;letter-spacing:0.1px;}
+#tj_12{left:275px;top:419px;letter-spacing:0.1px;}
+#tk_12{left:165px;top:436px;letter-spacing:0.1px;}
+#tl_12{left:275px;top:436px;letter-spacing:0.1px;}
+#tm_12{left:138px;top:490px;letter-spacing:-0.8px;word-spacing:-2.5px;}
+#tn_12{left:138px;top:544px;letter-spacing:0.1px;}
+#to_12{left:138px;top:577px;letter-spacing:0.1px;word-spacing:0.1px;}
+#tp_12{left:165px;top:611px;letter-spacing:0.1px;}
+#tq_12{left:220px;top:628px;letter-spacing:0.1px;}
+#tr_12{left:220px;top:645px;letter-spacing:0.1px;}
+#ts_12{left:220px;top:662px;letter-spacing:0.1px;}
+#tt_12{left:137px;top:699px;letter-spacing:0.1px;word-spacing:-0.1px;}
+#tu_12{left:165px;top:732px;letter-spacing:0.1px;}
+#tv_12{left:220px;top:750px;letter-spacing:0.1px;}
+#tw_12{left:220px;top:767px;letter-spacing:0.1px;}
+#tx_12{left:137px;top:803px;word-spacing:5.1px;}
+#ty_12{left:137px;top:821px;letter-spacing:0.1px;word-spacing:3.7px;}
+#tz_12{left:138px;top:839px;word-spacing:0.4px;}
+
+.s1_12{
+	FONT-SIZE: 60.9px;
+	FONT-FAMILY: ArialMT_a;
+	color: rgb(0,0,0);
+}
+
+.s2_12{
+	FONT-SIZE: 60.9px;
+	FONT-FAMILY: CourierNewPS-BoldMT_c;
+	color: rgb(0,0,0);
+}
+
+.s3_12{
+	FONT-SIZE: 122.5px;
+	FONT-FAMILY: Arial-BoldMT_b;
+	color: rgb(0,0,0);
+}
+
+.s4_12{
+	FONT-SIZE: 97.5px;
+	FONT-FAMILY: Arial-BoldMT_b;
+	color: rgb(0,0,0);
+}
+
+#popup_63_0_R{top: 560px;left: 469.4562px;}
+.annotPopup{position: absolute;background-color:#FFFF99;border: 2px solid black;font-family:sans-serif;font-size:14px;z-index:2;width:200px;}
+.annotDragbar{overflow:auto; border-bottom:1px solid black; background-color:#aaa659; height:20px; cursor:move;}
+.annotHeader{border-bottom:1px solid black;}
+#form1_12{	z-index:2;	border-style:none;	position: absolute;	left:136px;	top:492px;	width:663px;	height:365px;	text-align:left;	background: transparent;	background-image: url("12/form/63 0 ROff.png");	background-repeat: no-repeat;	font:normal 291px Arial, Helvetica, sans-serif;}
+
+</style>
+<!-- End inline CSS -->
+
+<!-- Begin embedded font definitions -->
+<style id="fonts12" type="text/css" >
+
+@font-face {
+	font-family: CourierNewPS-BoldMT_c;
+	src: url("fonts/CourierNewPS-BoldMT_c.woff") format("woff");
+}
+
+@font-face {
+	font-family: Arial-BoldMT_b;
+	src: url("fonts/Arial-BoldMT_b.woff") format("woff");
+}
+
+@font-face {
+	font-family: ArialMT_a;
+	src: url("fonts/ArialMT_a.woff") format("woff");
+}
+
+</style>
+<!-- End embedded font definitions -->
+
+<!-- Begin page background -->
+<div id="pg12Overlay" style="width:100%; height:100%; position:absolute; z-index:1; background-color:rgba(0,0,0,0); -webkit-user-select: none;"></div>
+<div id="pg12" style="-webkit-user-select: none;"><object width="935" height="1210" data="12/12.svg" type="image/svg+xml" id="pdf12" style="width:935px; height:1210px; background-color:white; -moz-transform:scale(1); z-index: 0;"></object></div>
+<!-- End page background -->
+
+
+<!-- Begin text definitions (Positioned/styled in CSS) -->
+<div id="t1_12" class="t s1_12">36</div>
+<div id="t2_12" class="t s2_12">printf("token %s (%d)\n", s, yylval.ivalue); </div>
+<div id="t3_12" class="t s2_12">return tok; </div>
+<div id="t4_12" class="t s2_12">} </div>
+<div id="t5_12" class="t s2_12">#define RETURN(x) return dbgToken(x, #x) </div>
+<div id="t6_12" class="t s2_12">#define RETURN_ivalue(x) return dbgTokenIvalue(x, #x) </div>
+<div id="t7_12" class="t s2_12">#else </div>
+<div id="t8_12" class="t s2_12">#define RETURN(x) return(x) </div>
+<div id="t9_12" class="t s2_12">#define RETURN_ivalue(x) return(x) </div>
+<div id="ta_12" class="t s2_12">#endif </div>
+<div id="tb_12" class="t s2_12">%} </div>
+<div id="tc_12" class="t s2_12">%% </div>
+<div id="td_12" class="t s2_12">[0-9]+ </div>
+<div id="te_12" class="t s2_12">{ </div>
+<div id="tf_12" class="t s2_12">yylval.ivalue = atoi(yytext); </div>
+<div id="tg_12" class="t s2_12">RETURN_ivalue(INTEGER); </div>
+<div id="th_12" class="t s2_12">} </div>
+<div id="ti_12" class="t s2_12">"if" </div>
+<div id="tj_12" class="t s2_12">RETURN(IF); </div>
+<div id="tk_12" class="t s2_12">"else" </div>
+<div id="tl_12" class="t s2_12">RETURN(ELSE); </div>
+<div id="tm_12" class="t s3_12">More Yacc </div>
+<div id="tn_12" class="t s4_12">Recursion </div>
+<div id="to_12" class="t s1_12">A list may be specified with left recursion </div>
+<div id="tp_12" class="t s2_12">list: </div>
+<div id="tq_12" class="t s2_12">item </div>
+<div id="tr_12" class="t s2_12">| list ',' item </div>
+<div id="ts_12" class="t s2_12">; </div>
+<div id="tt_12" class="t s1_12">or right recursion. </div>
+<div id="tu_12" class="t s2_12">list: </div>
+<div id="tv_12" class="t s2_12">item </div>
+<div id="tw_12" class="t s2_12">| item ',' list </div>
+<div id="tx_12" class="t s1_12">If right recursion is used then all items on the list are pushed on the stack. After the last item is </div>
+<div id="ty_12" class="t s1_12">pushed we start reducing. With left recursion we never have more than three terms on the stack </div>
+<div id="tz_12" class="t s1_12">since we reduce as we go along. For this reason it is advantageous to use left recursion. </div>
+
+<!-- End text definitions -->
+
+
+<!-- Begin Form Data -->
+<form>
+<div style='visibility:hidden;' id="popup_63_0_R" class='annotPopup'>
+  <div class="annotDragbar" onmousemove="new Draggable(this);" ontouchstart="new Draggable(this);" title="Press to minimise"></div>	<div class='annotHeader'>
+		<br/>
+		<br/>
+		30/04/2017 22:38:01 GMT<br/>
+	</div>
+	<div class='annotContent'></div>
+</div>
+<input type="button"  tabindex="1"  id="form1_12" data-objref="63 0 R" onclick="toggleAnnotation('popup_63_0_R');"/>
+
+</form>
+<!-- End Form Data -->
+<!--[if lt IE 9]><script type="text/javascript">
+(function(divCount, pageNum) {
+for (var i = 1; i < divCount; i++) {
+    var div = document.getElementById('t' + i.toString(36) + '_' + pageNum);
+    if (div !== null) {
+        div.style.top = (div.offsetTop * 4) + 'px';
+        div.style.left = (div.offsetLeft * 4) + 'px';
+        div.style.zoom = '25%';
+    }
+}
+})(36, 12);
+</script><![endif]-->
+
+</div>
+</body>
+</html>

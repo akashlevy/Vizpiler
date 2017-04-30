@@ -1,0 +1,408 @@
+<!DOCTYPE html >
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta charset="utf-8" />
+</head>
+
+<body style="margin: 0;">
+
+<div id="p65" style="overflow: hidden; position: relative; width: 818px; height: 1066px;">
+<script type=text/javascript>
+	function toggleAnnotation(id){
+	   var annotation = document.getElementById(id).style;
+	   annotation.visibility = annotation.visibility === 'hidden' ? 'visible' : 'hidden';
+	}
+	var lastDragged;
+	function Draggable(element){
+		this.element=element;
+		this.offsets={};
+		this.mousePos={};
+		this.isMoving=false;
+		this.newPos={};
+		this.html=document.getElementsByTagName("html").item(0);
+		this.isTouch='ontouchstart' in window;
+		var self=this;
+		this.element.onmousemove=null;
+		if(this.html.addEventListener){
+			if(this.isTouch){
+				this.element.addEventListener("touchstart", moveStart);
+				this.html.addEventListener("touchmove", movePopup);
+				this.html.addEventListener("touchend", releaseAnnot);
+				try{moveStart(event);}catch(ex){}
+			}else{
+				this.element.addEventListener("mousedown", moveStart);
+				this.html.addEventListener("mousemove", movePopup);
+				this.html.addEventListener("mouseup", releaseAnnot);
+			}
+		}else if(this.html.attachEvent){
+			this.html.attachEvent("onmousedown", moveStart);
+			this.html.attachEvent("onmousemove", movePopup);
+			this.html.attachEvent("onmouseup", releaseAnnot);
+		}
+
+		function moveStart(event){
+			event = event || window.event;
+			self.isMoving = true;
+			self.mousePos.x=event.clientX || event.touches[0].pageX;
+			self.mousePos.y=event.clientY || event.touches[0].pageY;
+			self.offsets.left=self.element.parentNode.offsetLeft;
+			self.offsets.top=self.element.parentNode.offsetTop;
+			self.newPos.left=self.offsets.left;
+			self.newPos.top=self.offsets.top;
+			self.element.parentNode.style.zIndex=5;
+			if(lastDragged)
+				lastDragged.style.zIndex=4;
+		}
+
+		function releaseAnnot(event){
+			self.isMoving=false;
+			lastDragged=self.element.parentNode;
+		}
+
+		function movePopup(event){
+			if(self.isMoving === false)
+				return;
+			(event.preventDefault) ? event.preventDefault() : event.returnValue = false;
+			event = event || window.event;			
+			self.newPos.left=(event.clientX || event.touches[0].pageX) - self.mousePos.x + self.offsets.left;
+			self.newPos.top =(event.clientY || event.touches[0].pageY) - self.mousePos.y + self.offsets.top;
+			self.element.parentNode.style.top = self.newPos.top+"px";
+			self.element.parentNode.style.left = self.newPos.left+"px";
+		}
+
+		element.onclick =function(event){
+			if(self.offsets.left === self.newPos.left && self.newPos.top === self.offsets.top){
+				toggleAnnotation(self.element.parentNode.id);
+				self.isMoving=false;
+			}
+		}
+	}
+</script>
+
+
+
+<!-- Begin shared CSS values -->
+<style class="shared-css" type="text/css" >
+.t {
+	-webkit-transform-origin: top left;
+	-moz-transform-origin: top left;
+	-o-transform-origin: top left;
+	-ms-transform-origin: top left;
+	-webkit-transform: scale(0.25);
+	-moz-transform: scale(0.25);
+	-o-transform: scale(0.25);
+	-ms-transform: scale(0.25);
+	z-index: 2;
+	position: absolute;
+	white-space: pre;
+	overflow: visible;
+}
+</style>
+<!-- End shared CSS values -->
+
+
+<!-- Begin inline CSS -->
+<style type="text/css" >
+
+#t1_65{left:207px;top:87px;letter-spacing:-0.2px;word-spacing:1.1px;}
+#t2_65{left:207px;top:133px;letter-spacing:-0.3px;word-spacing:6.6px;}
+#t3_65{left:610px;top:134px;}
+#t4_65{left:665px;top:133px;letter-spacing:-0.2px;word-spacing:4.9px;}
+#t5_65{left:207px;top:155px;letter-spacing:-0.3px;word-spacing:0.5px;}
+#t6_65{left:287px;top:156px;}
+#t7_65{left:324px;top:155px;letter-spacing:-0.2px;word-spacing:0.3px;}
+#t8_65{left:225px;top:177px;letter-spacing:-0.3px;word-spacing:3.2px;}
+#t9_65{left:337px;top:178px;word-spacing:-0.4px;}
+#ta_65{left:415px;top:177px;letter-spacing:-0.3px;word-spacing:2.9px;}
+#tb_65{left:207px;top:199px;letter-spacing:-0.4px;word-spacing:2px;}
+#tc_65{left:287px;top:199px;letter-spacing:-0.4px;word-spacing:3px;}
+#td_65{left:369px;top:199px;letter-spacing:-0.3px;word-spacing:2.6px;}
+#te_65{left:207px;top:221px;letter-spacing:-0.3px;word-spacing:3.1px;}
+#tf_65{left:207px;top:243px;letter-spacing:-0.3px;word-spacing:1.4px;}
+#tg_65{left:392px;top:244px;}
+#th_65{left:423px;top:243px;word-spacing:-6px;}
+#ti_65{left:447px;top:244px;}
+#tj_65{left:469px;top:243px;word-spacing:-6px;}
+#tk_65{left:493px;top:244px;}
+#tl_65{left:521px;top:243px;letter-spacing:-0.3px;word-spacing:0.9px;}
+#tm_65{left:207px;top:264px;letter-spacing:-0.3px;word-spacing:2.7px;}
+#tn_65{left:207px;top:286px;letter-spacing:-0.4px;word-spacing:6.2px;}
+#to_65{left:207px;top:308px;}
+#tp_65{left:220px;top:310px;}
+#tq_65{left:253px;top:308px;letter-spacing:-0.3px;word-spacing:7.7px;}
+#tr_65{left:207px;top:330px;letter-spacing:-0.3px;word-spacing:9.1px;}
+#ts_65{left:649px;top:330px;letter-spacing:-0.4px;}
+#tt_65{left:706px;top:330px;letter-spacing:-0.3px;}
+#tu_65{left:207px;top:354px;word-spacing:-0.4px;}
+#tv_65{left:280px;top:352px;letter-spacing:-0.2px;word-spacing:0.6px;}
+#tw_65{left:422px;top:354px;}
+#tx_65{left:490px;top:352px;letter-spacing:-0.4px;word-spacing:0.7px;}
+#ty_65{left:79px;top:395px;word-spacing:-6.8px;}
+#tz_65{left:207px;top:395px;letter-spacing:-0.9px;}
+#t10_65{left:207px;top:418px;letter-spacing:-0.4px;word-spacing:11.6px;}
+#t11_65{left:207px;top:440px;letter-spacing:-0.3px;word-spacing:1.2px;}
+#t12_65{left:225px;top:462px;letter-spacing:-0.7px;word-spacing:1.7px;}
+#t13_65{left:403px;top:464px;}
+#t14_65{left:489px;top:462px;letter-spacing:-0.3px;word-spacing:0.7px;}
+#t15_65{left:529px;top:464px;}
+#t16_65{left:584px;top:462px;}
+#t17_65{left:225px;top:484px;letter-spacing:-0.4px;word-spacing:1.5px;}
+#t18_65{left:416px;top:486px;}
+#t19_65{left:530px;top:484px;letter-spacing:-0.4px;}
+#t1a_65{left:207px;top:521px;}
+#t1b_65{left:288px;top:521px;letter-spacing:-0.4px;word-spacing:-0.5px;}
+#t1c_65{left:207px;top:541px;}
+#t1d_65{left:334px;top:540px;word-spacing:-4px;}
+#t1e_65{left:225px;top:560px;word-spacing:-0.3px;}
+#t1f_65{left:207px;top:581px;}
+#t1g_65{left:288px;top:580px;letter-spacing:-0.2px;word-spacing:-4px;}
+#t1h_65{left:632px;top:581px;}
+#t1i_65{left:715px;top:580px;}
+#t1j_65{left:225px;top:600px;letter-spacing:-0.1px;word-spacing:-4.1px;}
+#t1k_65{left:207px;top:620px;}
+#t1l_65{left:316px;top:620px;letter-spacing:-0.1px;word-spacing:-0.5px;}
+#t1m_65{left:207px;top:640px;}
+#t1n_65{left:298px;top:639px;letter-spacing:-0.1px;word-spacing:-0.3px;}
+#t1o_65{left:225px;top:677px;letter-spacing:-1.3px;word-spacing:3.6px;}
+#t1p_65{left:335px;top:678px;}
+#t1q_65{left:413px;top:677px;letter-spacing:-0.3px;word-spacing:2.5px;}
+#t1r_65{left:207px;top:700px;}
+#t1s_65{left:271px;top:699px;letter-spacing:-0.4px;word-spacing:4.5px;}
+#t1t_65{left:207px;top:721px;letter-spacing:-0.5px;word-spacing:0.9px;}
+#t1u_65{left:225px;top:742px;letter-spacing:-0.5px;word-spacing:6.6px;}
+#t1v_65{left:207px;top:764px;letter-spacing:-0.3px;word-spacing:2.3px;}
+#t1w_65{left:207px;top:786px;letter-spacing:-0.3px;word-spacing:-3px;}
+#t1x_65{left:225px;top:808px;letter-spacing:-0.3px;word-spacing:2.1px;}
+#t1y_65{left:207px;top:830px;letter-spacing:-0.2px;}
+#t1z_65{left:225px;top:868px;letter-spacing:-0.1px;word-spacing:-0.9px;}
+#t20_65{left:225px;top:887px;word-spacing:-0.9px;}
+#t21_65{left:359px;top:887px;letter-spacing:0.2px;}
+#t22_65{left:375px;top:887px;}
+#t23_65{left:207px;top:922px;letter-spacing:-0.3px;word-spacing:2px;}
+#t24_65{left:207px;top:944px;letter-spacing:-0.3px;word-spacing:0.8px;}
+#t25_65{left:79px;top:983px;letter-spacing:-0.2px;}
+
+.s1_65{
+	FONT-SIZE: 55px;
+	FONT-FAMILY: Gu_9p;
+	color: rgb(35,31,32);
+}
+
+.s2_65{
+	FONT-SIZE: 66.9px;
+	FONT-FAMILY: Times-Roman_9q;
+	color: rgb(35,31,32);
+}
+
+.s3_65{
+	FONT-SIZE: 61.1px;
+	FONT-FAMILY: Courier_9u;
+	color: rgb(35,31,32);
+}
+
+.s4_65{
+	FONT-SIZE: 66.9px;
+	FONT-FAMILY: Times-Italic_9r;
+	color: rgb(35,31,32);
+}
+
+.s5_65{
+	FONT-SIZE: 66.9px;
+	FONT-FAMILY: Gf_9v;
+	color: rgb(35,31,32);
+}
+
+.s6_65{
+	FONT-SIZE: 73.3px;
+	FONT-FAMILY: Gu_9p;
+	color: rgb(35,31,32);
+}
+
+.s7_65{
+	FONT-SIZE: 64.2px;
+	FONT-FAMILY: Times-Roman_9q;
+	color: rgb(35,31,32);
+}
+
+.s8_65{
+	FONT-SIZE: 61.1px;
+	FONT-FAMILY: Times-Roman_9q;
+	color: rgb(35,31,32);
+}
+
+.s9_65{
+	FONT-SIZE: 61.1px;
+	FONT-FAMILY: Times-Bold_ab;
+	color: rgb(35,31,32);
+}
+
+.s10_65{
+	FONT-SIZE: 70.3px;
+	FONT-FAMILY: Gu_9p;
+	color: rgb(35,31,32);
+}
+
+#popup_468_0_R{top: 631px;left: 436.6725px;}
+.annotPopup{position: absolute;background-color:#FFFF99;border: 2px solid black;font-family:sans-serif;font-size:14px;z-index:2;width:200px;}
+.annotDragbar{overflow:auto; border-bottom:1px solid black; background-color:#aaa659; height:20px; cursor:move;}
+.annotHeader{border-bottom:1px solid black;}
+#form1_65{	z-index:2;	border-style:none;	position: absolute;	left:78px;	top:399px;	width:642px;	height:567px;	text-align:left;	background: transparent;	background-image: url("65/form/468 0 ROff.png");	background-repeat: no-repeat;	font:normal 452px Arial, Helvetica, sans-serif;}
+
+</style>
+<!-- End inline CSS -->
+
+<!-- Begin embedded font definitions -->
+<style id="fonts65" type="text/css" >
+
+@font-face {
+	font-family: Times-Roman_9q;
+	src: url("fonts/Times-Roman_9q.woff") format("woff");
+}
+
+@font-face {
+	font-family: Times-Italic_9r;
+	src: url("fonts/Times-Italic_9r.woff") format("woff");
+}
+
+@font-face {
+	font-family: Gf_9v;
+	src: url("fonts/Gf_9v.woff") format("woff");
+}
+
+@font-face {
+	font-family: Gu_9p;
+	src: url("fonts/Gu_9p.woff") format("woff");
+}
+
+@font-face {
+	font-family: Times-Bold_ab;
+	src: url("fonts/Times-Bold_ab.woff") format("woff");
+}
+
+@font-face {
+	font-family: Courier_9u;
+	src: url("fonts/Courier_9u.woff") format("woff");
+}
+
+</style>
+<!-- End embedded font definitions -->
+
+<!-- Begin page background -->
+<div id="pg65Overlay" style="width:100%; height:100%; position:absolute; z-index:1; background-color:rgba(0,0,0,0); -webkit-user-select: none;"></div>
+<div id="pg65" style="-webkit-user-select: none;"><object width="818" height="1066" data="65/65.svg" type="image/svg+xml" id="pdf65" style="width:818px; height:1066px; background-color:white; -moz-transform:scale(1); z-index: 0;"></object></div>
+<!-- End page background -->
+
+
+<!-- Begin text definitions (Positioned/styled in CSS) -->
+<div id="t1_65" class="t s1_65">CHAPTER THREE. PARSING</div>
+<div id="t2_65" class="t s2_65">Here the programmer is suggesting that users often write “</div>
+<div id="t3_65" class="t s3_65">; else</div>
+<div id="t4_65" class="t s2_65">” where</div>
+<div id="t5_65" class="t s2_65">they mean “</div>
+<div id="t6_65" class="t s3_65">else</div>
+<div id="t7_65" class="t s2_65">” and so on.</div>
+<div id="t8_65" class="t s2_65">The insertion of</div>
+<div id="t9_65" class="t s3_65">in 0 end</div>
+<div id="ta_65" class="t s2_65">is a particularly important kind of correction,</div>
+<div id="tb_65" class="t s2_65">known as a</div>
+<div id="tc_65" class="t s4_65">scope closer</div>
+<div id="td_65" class="t s2_65">. Programs commonly have extra left parentheses or</div>
+<div id="te_65" class="t s2_65">right parentheses, or extra left or right brackets, and so on. In Tiger, another</div>
+<div id="tf_65" class="t s2_65">kind of nesting construct is</div>
+<div id="tg_65" class="t s3_65">let</div>
+<div id="th_65" class="t s5_65">· · ·</div>
+<div id="ti_65" class="t s3_65">in</div>
+<div id="tj_65" class="t s5_65">· · ·</div>
+<div id="tk_65" class="t s3_65">end</div>
+<div id="tl_65" class="t s2_65">. If the programmer forgets to</div>
+<div id="tm_65" class="t s2_65">close a scope that was opened by left parenthesis, then the automatic single-</div>
+<div id="tn_65" class="t s2_65">token insertion heuristic can close this scope where necessary. But to close</div>
+<div id="to_65" class="t s2_65">a</div>
+<div id="tp_65" class="t s3_65">let</div>
+<div id="tq_65" class="t s2_65">scope requires the insertion of three tokens, which will not be done</div>
+<div id="tr_65" class="t s2_65">automatically unless the compiler-writer has suggested “change</div>
+<div id="ts_65" class="t s4_65">nothing</div>
+<div id="tt_65" class="t s2_65">to</div>
+<div id="tu_65" class="t s3_65">in 0 end</div>
+<div id="tv_65" class="t s2_65">” as illustrated in the</div>
+<div id="tw_65" class="t s3_65">%change</div>
+<div id="tx_65" class="t s2_65">command above.</div>
+<div id="ty_65" class="t s6_65">P R O G R A M</div>
+<div id="tz_65" class="t s6_65">PARSING</div>
+<div id="t10_65" class="t s2_65">Use Yacc to implement a parser for the Tiger language. Appendix A de-</div>
+<div id="t11_65" class="t s2_65">scribes, among other things, the syntax of Tiger.</div>
+<div id="t12_65" class="t s2_65">You should turn in the ﬁle</div>
+<div id="t13_65" class="t s3_65">tiger.grm</div>
+<div id="t14_65" class="t s2_65">and a</div>
+<div id="t15_65" class="t s3_65">README</div>
+<div id="t16_65" class="t s2_65">.</div>
+<div id="t17_65" class="t s2_65">Supporting ﬁles available in</div>
+<div id="t18_65" class="t s3_65">$TIGER/chap3</div>
+<div id="t19_65" class="t s2_65">include:</div>
+<div id="t1a_65" class="t s3_65">makefile</div>
+<div id="t1b_65" class="t s7_65">The “makeﬁle.”</div>
+<div id="t1c_65" class="t s3_65">errormsg.[ch]</div>
+<div id="t1d_65" class="t s7_65">The Error Message structure, useful for producing error mes-</div>
+<div id="t1e_65" class="t s7_65">sages with ﬁle names and line numbers.</div>
+<div id="t1f_65" class="t s3_65">lex.yy.c</div>
+<div id="t1g_65" class="t s7_65">The lexical analyzer. I haven’t provided the source ﬁle</div>
+<div id="t1h_65" class="t s3_65">tiger.lex</div>
+<div id="t1i_65" class="t s7_65">,</div>
+<div id="t1j_65" class="t s7_65">but I’ve provided the output of Lex that you can use if your lexer isn’t working.</div>
+<div id="t1k_65" class="t s3_65">parsetest.c</div>
+<div id="t1l_65" class="t s7_65">A driver to run your parser on an input ﬁle.</div>
+<div id="t1m_65" class="t s3_65">tiger.grm</div>
+<div id="t1n_65" class="t s7_65">The skeleton of a ﬁle you must ﬁll in.</div>
+<div id="t1o_65" class="t s2_65">You won’t need</div>
+<div id="t1p_65" class="t s3_65">tokens.h</div>
+<div id="t1q_65" class="t s2_65">anymore; instead, the header ﬁle for tokens is</div>
+<div id="t1r_65" class="t s3_65">y.tab.h</div>
+<div id="t1s_65" class="t s2_65">, which is produced automatically by Yacc from the token speciﬁ-</div>
+<div id="t1t_65" class="t s2_65">cation of your grammar.</div>
+<div id="t1u_65" class="t s2_65">Your grammar should have as few shift-reduce con°icts as possible, and</div>
+<div id="t1v_65" class="t s2_65">no reduce-reduce con°icts. Furthermore, your accompanying documentation</div>
+<div id="t1w_65" class="t s2_65">should list each shift-reduce con°ict (if any) and explain why it is not harmful.</div>
+<div id="t1x_65" class="t s2_65">My grammar has a shift-reduce con°ict that’s related to the confusion be-</div>
+<div id="t1y_65" class="t s2_65">tween</div>
+<div id="t1z_65" class="t s8_65">variable [ expression ]</div>
+<div id="t20_65" class="t s8_65">type-id [ expression ]</div>
+<div id="t21_65" class="t s9_65">of</div>
+<div id="t22_65" class="t s8_65">expression</div>
+<div id="t23_65" class="t s2_65">In fact, I had to add a seemingly redundant grammar rule to handle this con-</div>
+<div id="t24_65" class="t s2_65">fusion. Is there a way to do this without a shift-reduce con°ict?</div>
+<div id="t25_65" class="t s10_65">82</div>
+
+<!-- End text definitions -->
+
+
+<!-- Begin Form Data -->
+<form>
+<div style='visibility:hidden;' id="popup_468_0_R" class='annotPopup'>
+  <div class="annotDragbar" onmousemove="new Draggable(this);" ontouchstart="new Draggable(this);" title="Press to minimise"></div>	<div class='annotHeader'>
+		<br/>
+		<br/>
+		30/04/2017 23:14:25 GMT<br/>
+	</div>
+	<div class='annotContent'></div>
+</div>
+<input type="button"  tabindex="1"  id="form1_65" data-objref="468 0 R" onclick="toggleAnnotation('popup_468_0_R');"/>
+
+</form>
+<!-- End Form Data -->
+<!--[if lt IE 9]><script type="text/javascript">
+(function(divCount, pageNum) {
+for (var i = 1; i < divCount; i++) {
+    var div = document.getElementById('t' + i.toString(36) + '_' + pageNum);
+    if (div !== null) {
+        div.style.top = (div.offsetTop * 4) + 'px';
+        div.style.left = (div.offsetLeft * 4) + 'px';
+        div.style.zoom = '25%';
+    }
+}
+})(78, 65);
+</script><![endif]-->
+
+</div>
+</body>
+</html>
