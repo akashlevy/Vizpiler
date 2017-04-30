@@ -57,6 +57,7 @@ div.tab button.active {
     border-radius: 2px #ccc;
     border-top: none;
     height: inherit;
+    overflow: scroll;
 }
 
 /* Style the tab content */

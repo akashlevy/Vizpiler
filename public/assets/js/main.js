@@ -1,3 +1,20 @@
+requirejs.config({
+	//By default load any module IDs from js/lib
+	baseUrl: 'js',
+	//except, if the module ID starts with "app",
+	//load it from the js/app directory. paths
+	//config is relative to the baseUrl, and
+	//never includes a ".js" extension since
+	//the paths config could be for a directory.
+	paths: {
+		d3: '../bower_components/d3/d3',
+		"dot-checker": '../bower_components/graphviz-d3-renderer/dist/dot-checker',
+		"layout-worker": '../bower_components/graphviz-d3-renderer/dist/layout-worker',
+		worker: '../bower_components/requirejs-web-workers/src/worker',
+		renderer: '../bower_components/graphviz-d3-renderer/dist/renderer'
+	}
+});
+
 var lexereditor = CodeMirror.fromTextArea(lexercode,
 {
     lineNumbers: true,
@@ -47,8 +64,18 @@ function lexerCompile() {
             $("#LexerMessages").html("<b><p style=\"font-size:20px\">Success!</p></b>Go to the next tab to see the FSM.");
             var g = graphlibDot.read(result["stdout"])
             
-            image = Viz(result["stdout"], { format: "png-image-element" });
-            $("#LexerVisual").prepend(image);
+            //image = Viz(result["stdout"], { format: "png-image-element" });
+            //$("#LexerVisual").prepend(image);
+
+            require(["renderer"], function (renderer) {
+                dotSource = result["stdout"];
+                // initialize svg stage. Have to get a return value from renderer.init 
+                //   to properly reset the image.
+                zoomFunc = renderer.init({element:"#LexerVisual", extend:[0.1, 10]});
+
+                // update stage with new dot source
+                renderer.render(dotSource);
+            });  
         }
     });
 }

@@ -36,7 +36,7 @@
           <button class="tablinks" onclick="openTab(event, 'ASTVisual')">AST Visual</button>
           <button class="tablinks" onclick="openTab(event, 'Interpreter')">Interpreter</button>
         </div>
-        <div id="LexerCode" class="codecontent">
+        <div id="LexerCode" class="codecontent" style="overflow: scroll">
           <table style="width:100%">
             <tr>
               <td style="width:65%">
@@ -100,7 +100,7 @@ int yywrap(void) {
             </tr>
           </table>
         </div>
-        <div id="ParserCode" class="codecontent">
+        <div id="ParserCode" class="codecontent" style="overflow: scroll">
           <textarea id="parsercode">
 %{
 #include <stdio.h>
@@ -273,12 +273,12 @@ int main(void) {
     return 0;
 }</textarea>
         </div>
-        <div id="LexerVisual" class="tabcontent" style="text-align: center">
-          <svg id="graphContainer">
+        <div id="LexerVisual" class="tabcontent" style="text-align: center; overflow: scroll;">
+          <!-- <svg id="graphContainer">
             <g/>
-          </svg>
+          </svg> -->
         </div>
-        <div id="ParserVisual" class="tabcontent" style="text-align: center">
+        <div id="ParserVisual" class="tabcontent" style="text-align: center; overflow: scroll;">
           <img style="height: 100%" src="https://www.gnu.org/software/bison/manual/html_node/figs/example.png"/>
         </div>
         <div id="ASTVisual" class="tabcontent">
@@ -304,6 +304,6 @@ int main(void) {
     <script src='assets/js/bootstrap.min.js'></script>
     <script src="assets/js/graphlib-dot.min.js"></script>
     <script src="assets/js/viz.js"></script>
-    <script src='assets/js/main.js'></script>
+    <script src='assets/js/require.js' data-main="assets/js/main"></script>
   </body>
 </html>
