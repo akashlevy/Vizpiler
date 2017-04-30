@@ -1,0 +1,8 @@
+{
+  "name": "Vizpiler",
+  "description": "An interactive visual tutorial on lexing/parsing in compilers",
+  "repository": "https://github.com/akashlevy/Vizpiler",
+  "logo": "public/img/icon.png",
+  "keywords": ["visual", "compilers", "tutorial"],
+  "image": "public/img/icon"
+}
