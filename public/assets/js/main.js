@@ -124,21 +124,7 @@ function stopLexing() {
     $("#lexingCodeOutput").text("");
 
     // Reset graph to original
-    pan = panZoomLex.getPan();
-    zoom = panZoomLex.getZoom();
-    $graph = $(Viz(graphlibDot.write(lexGraph)));
-    $graph.attr("visibility", "hidden");
-    $(function() {
-        $("#LexerVisualGraph").html($graph);
-    });
-    $(function() {
-        panZoomLex = svgPanZoom('#LexerVisualGraph > svg', {minZoom: 0.1, maxZoom: 1});
-        panZoomLex.zoom(zoom);
-        panZoomLex.pan(pan);
-    });
-    $(function() {
-        $('#LexerVisualGraph > svg').attr('visibility', 'visible');
-    });
+    $("#LexerVisualGraph").find(".node").find("ellipse").attr("fill", "none");
 }
 
 // Run the lexer on one character
@@ -152,24 +138,8 @@ function stepLexer(graphit) {
 
     // Highlight the graph
     if (graphit) {
-        lexModGraph = jQuery.extend(true, {}, lexGraph);
-        lexModGraph.node(lexState).style = "filled";
-        lexModGraph.node(lexState).fillcolor = "red";
-        pan = panZoomLex.getPan();
-        zoom = panZoomLex.getZoom();
-        $graph = $(Viz(graphlibDot.write(lexModGraph)));
-        $graph.attr("visibility", "hidden");
-        $(function() {
-            $("#LexerVisualGraph").html($graph);
-        });
-        $(function() {
-            panZoomLex = svgPanZoom('#LexerVisualGraph > svg', {minZoom: 0.1, maxZoom: 1});
-            panZoomLex.zoom(zoom);
-            panZoomLex.pan(pan);
-        });
-        $(function() {
-            $('#LexerVisualGraph > svg').attr('visibility', 'visible');
-        });
+        $("#LexerVisualGraph").find(".node").find("ellipse").attr("fill", "none");
+        $("#LexerVisualGraph").find(".node:contains('" + lexState + "')").find("ellipse").attr("fill", "red");
     }
 
     // Compute next state
