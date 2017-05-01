@@ -3,4 +3,4 @@
 # Vizpiler
 An interactive visual tutorial on lexing/parsing in compilers
 
-[Try it!](https://akashlevy.github.io/Vizpiler/)
+[Try it!](https://vizpiler.herokuapp.com/)
