@@ -87,7 +87,7 @@ int yywrap(void) {
 }</textarea>
           </div>
           <div id="LexerCompile" class="compilemsgcontent" style="height: 100%; width:35%; float:left">
-            <button onclick="lexerCompile();" style="width:100%">Compile</button>
+            <button onclick="stopLexing(); lexerCompile();" style="width:100%">Compile</button>
             <br><br>
             <div id="LexerMessages" style="overflow-y:scroll; height: 100%">
             Enter the <i>flex</i> code you want to visualize and then compile it!
@@ -269,7 +269,7 @@ int main(void) {
 }</textarea>
           </div>
           <div id="ParserCompile" class="compilemsgcontent" style="height: 100%; width:35%; float:left">
-            <button onclick="parseCompile();" style="width:100%">Compile</button>
+            <button onclick="stopParsing(); parseCompile();" style="width:100%">Compile</button>
             <br><br>
             <div id="LexerMessages" style="overflow-y:scroll; height: 100%">
             Enter the <i>bison</i> code you want to visualize and then compile it!
