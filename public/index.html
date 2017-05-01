@@ -36,7 +36,7 @@
           <button class="tablinks" onclick="openTab(event, 'ASTVisual')">AST Visual</button>
           <button class="tablinks" onclick="openTab(event, 'Interpreter')">Interpreter</button>
         </div>
-        <div id="LexerCode" class="codecontent" style="overflow: scroll">
+        <div id="LexerCode" class="codecontent" style="overflow: hidden">
           <table style="width:100%">
             <tr>
               <td style="width:65%">
@@ -89,10 +89,10 @@ int yywrap(void) {
 }</textarea>
               </td>
               <td>
-                <div id="LexerCompile" class="compilemsgcontent">
+                <div id="LexerCompile" class="compilemsgcontent" style="height: 100%">
                   <button onclick="lexerCompile();" style="width:100%">Compile</button>
                   <br><br>
-                  <div id="LexerMessages" style="overflow-y:scroll">
+                  <div id="LexerMessages" style="overflow-y:scroll; height: 100%">
                   Enter the <i>flex</i> code you want to visualize and then compile it!
                   </div>
                 </div>
@@ -100,7 +100,7 @@ int yywrap(void) {
             </tr>
           </table>
         </div>
-        <div id="ParserCode" class="codecontent" style="overflow: scroll">
+        <div id="ParserCode" class="codecontent" style="overflow: hidden">
           <textarea id="parsercode">
 %{
 #include <stdio.h>
@@ -281,8 +281,9 @@ int main(void) {
           </div>
           <div style="word-wrap: break-word; word-wrap: break-all; float: top; overflow: scroll; height: 50%; padding: 10px 10px; outline: #555555 dotted;">
             <button id="startLexBut" onclick="startLexing();" style="width:33.33%; float:left;" disabled="true">Start Lexing</button>
-            <button id="stepLexBut" onclick="stepLexer(true);" style="width:33.33%; float:left;" disabled="true">Step Forward</button>
+            <button id="stepLexBut" onclick="stepLexer(true);" style="width:33.33%; float:left;" disabled="true">Step Next</button>
             <button id="stepEndLexBut" onclick="stepEndLexer();" style="width:33.33%; float:top;" disabled="true">Step to End</button>
+            <br>
             <div id="lexingOutput"></div>
             <div id="lexingCodeOutput"></div>
           </div>
