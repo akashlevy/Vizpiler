@@ -127,7 +127,7 @@ function stopLexing() {
     pan = panZoomLex.getPan();
     zoom = panZoomLex.getZoom();
     $graph = $(Viz(graphlibDot.write(lexGraph)));
-    $graph.attr("visibility", "hidden")
+    $graph.attr("visibility", "hidden");
     $(function() {
         $("#LexerVisualGraph").html($graph);
     });
@@ -158,7 +158,7 @@ function stepLexer(graphit) {
         pan = panZoomLex.getPan();
         zoom = panZoomLex.getZoom();
         $graph = $(Viz(graphlibDot.write(lexModGraph)));
-        $graph.attr("visibility", "hidden")
+        $graph.attr("visibility", "hidden");
         $(function() {
             $("#LexerVisualGraph").html($graph);
         });

@@ -37,10 +37,8 @@
           <button class="tablinks" onclick="openTab(event, 'Interpreter')">Interpreter</button>
         </div>
         <div id="LexerCode" class="codecontent" style="overflow: hidden">
-          <table style="width:100%">
-            <tr>
-              <td style="width:65%">
-                <textarea id="lexercode">
+          <div style="width:65%; float:left">
+            <textarea id="lexercode">
 %{
 #include <stdlib.h>
 #include "calc3.h"
@@ -87,18 +85,14 @@ void yyerror(char *);
 int yywrap(void) {
     return 1;
 }</textarea>
-              </td>
-              <td>
-                <div id="LexerCompile" class="compilemsgcontent" style="height: 100%">
-                  <button onclick="lexerCompile();" style="width:100%">Compile</button>
-                  <br><br>
-                  <div id="LexerMessages" style="overflow-y:scroll; height: 100%">
-                  Enter the <i>flex</i> code you want to visualize and then compile it!
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </table>
+          </div>
+          <div id="LexerCompile" class="compilemsgcontent" style="height: 100%; width:35%; float:left">
+            <button onclick="lexerCompile();" style="width:100%">Compile</button>
+            <br><br>
+            <div id="LexerMessages" style="overflow-y:scroll; height: 100%">
+            Enter the <i>flex</i> code you want to visualize and then compile it!
+            </div>
+          </div>
         </div>
         <div id="ParserCode" class="codecontent" style="overflow: hidden">
           <textarea id="parsercode">
