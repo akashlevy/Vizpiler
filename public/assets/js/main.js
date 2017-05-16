@@ -41,6 +41,22 @@ var astinputeditor = CodeMirror.fromTextArea(astinput,
     mode: "text/x-c++src",
     theme: "dracula"
 });
+var interpretereditor = CodeMirror.fromTextArea(interpretercode,
+{
+    lineNumbers: true,
+    styleActiveLine: true,
+    matchBrackets: true,
+    mode: "text/x-c++src",
+    theme: "dracula"
+});
+var interpreterinputeditor = CodeMirror.fromTextArea(interpreterinput,
+{
+    lineNumbers: true,
+    styleActiveLine: true,
+    matchBrackets: true,
+    mode: "text/x-c++src",
+    theme: "dracula"
+});
 
 // Show and hide tabs
 function openTab(evt, tabName) {
@@ -65,14 +81,17 @@ function openTab(evt, tabName) {
     lexereditor.refresh();
     parsereditor.refresh();
     asteditor.refresh();
+    interpretereditor.refresh();
     lexerinputeditor.refresh();
     astinputeditor.refresh();
+    interpreterinputeditor.refresh();
 
-    // Refresh graphs and remove titles
+    // Refresh graphs, fix width, and remove titles
     try { panZoomLex = svgPanZoom('#LexerVisualGraph > svg', {minZoom: 0.1, maxZoom: 1}); } catch(err){}
     try { panZoomLex = svgPanZoom('#ParserVisualGraph > svg', {minZoom: 0.1, maxZoom: 1}); } catch(err){}
     try { panZoomLex = svgPanZoom('#ASTVisualGraph > svg', {minZoom: 0.1, maxZoom: 1}); } catch(err){}
-    $("g title").remove();
+    $("svg").attr("width", "100%");
+    $("svg > g > g > title").remove();
 }
 
 // Get the element with id="defaultOpen" and click on it
@@ -240,14 +259,67 @@ function astCompile() {
     // Make request to server
     $.post("ast", {"lexer": lexereditor.getValue(), "parser": parsereditor.getValue(), "ast": asteditor.getValue()}, function(result) {
         // If failure, display failure message
-        if (result["code"] != 0)
+        if (result["stderr"] != '')
             $("#ASTMessages").html("<b><p style=\"font-size:20px\">Compilation failed!</p></b>" + result["stderr"] + "<br>" + result["stdout"]);
         // If success, display "Success!" and render/process tree
         else {
-            $("#ASTMessages").html("<b><p style=\"font-size:20px\">Success!</p></b>Go to the next tab to see the AST.");
-            parseGraph = graphlibDot.read(result["stdout"])
-            image = Viz(result["stdout"]);
-            $("#ASTVisualGraph").html(image);
+            $("#ASTMessages").html("<b><p style=\"font-size:20px\">Success!</p></b>Go to the generate the AST based on some input.");
+            $("#getASTBut").attr("disabled", false);
         }
+    });
+}
+
+// Handle compiled code
+function getAST() {
+    // Make request to server
+    $.post("astinput", {"astinput": astinputeditor.getValue()}, function(result) {
+        // If failure, display failure message
+        if (result["code"] != 0)
+            $("#ASTOutput").html("<b><p style=\"font-size:20px\">AST generation failed!</p></b>" + result["stderr"] + "<br>" + result["stdout"]);
+        // If success, display "Success!" and render/process tree
+        else {
+            try {
+                $("#ASTOutput").html("<b><p style=\"font-size:20px\">Success!</p></b>");
+                parseGraph = graphlibDot.read(result["stdout"])
+                image = Viz(result["stdout"]);
+                $("#ASTVisualGraph").html(image);
+                try { panZoomLex = svgPanZoom('#ASTVisualGraph > svg', {minZoom: 0.1, maxZoom: 1}); } catch(err){}
+                $("svg").attr("width", "100%");
+            }
+            catch (err) {
+                $("#ASTOutput").html("<b><p style=\"font-size:20px\">AST generation failed!</p></b>" + result["stdout"]);
+            }
+        }
+    });
+}
+
+// Handle compiled code
+function interpreterCompile() {
+    // Show "Compiling..."
+    $("#InterpreterOutput").html("<b><p style=\"font-size:20px\">Compiling...</p></b>");
+
+    // Make request to server
+    $.post("interpreter", {"lexer": lexereditor.getValue(), "parser": parsereditor.getValue(), "interpreter": interpretereditor.getValue()}, function(result) {
+        // If failure, display failure message
+        if (result["stderr"] != '')
+            $("#InterpreterOutput").html("<b><p style=\"font-size:20px\">Compilation failed!</p></b>" + result["stderr"] + "<br>" + result["stdout"]);
+        // If success, display "Success!" and render output
+        else {
+            $("#InterpreterOutput").html("<b><p style=\"font-size:20px\">Success!</p></b>Type some code to see the interpreted output.");
+            $("#getInterpBut").attr("disabled", false);
+        }
+    });
+}
+
+// Handle compiled code
+function getInterp() {
+    // Make request to server
+    $.post("interpreterinput", {"interpreterinput": interpreterinputeditor.getValue()}, function(result) {
+        // If failure, display failure message
+        if (result["code"] != 0)
+            $("#InterpretOutput").html("<b><p style=\"font-size:20px\">Result generation failed!</p></b>" + result["stderr"] + "<br>" + result["stdout"]);
+        // If success, display "Success!" and show result
+        else
+            $("#InterpreterOutput").html("<b><p style=\"font-size:20px\">Success!</p></b>" + result["stdout"]);
     });
 }

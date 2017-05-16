@@ -257,3 +257,6 @@ stdout.gv
 # Executables and object files
 *.exe
 *.o
+
+# Temp folder
+tmp/*

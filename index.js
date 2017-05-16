@@ -3,9 +3,8 @@ var express = require('express');
 var app = express();
 
 
-// For temporary files
+// For files
 var fs = require('fs');
-var tempy = require('tempy');
 
 
 // Use ANSI color code to HTML converter for stderr
@@ -57,101 +56,137 @@ app.post('/lexer', function(req, res) {
 
 // Process parser requests
 app.post('/parser', function(req, res) {
-  // Write parser data to temp file
-  tmpfile = tempy.file({extension: 'tab.c'});
-  fs.writeFile(tmpfile, req.body['parser'], function(err) { if(err) return console.log(err); });
+  // Write parser data to file
+  fs.writeFile('tmp/parser.y', req.body['parser'], function(err) {
+    // Report file errors
+    if (err) return console.log(err);
 
-  // Spawn bison process and input parser data to it
-  const spawn = require('child_process').spawn;
-  const parser = spawn('bison', [tmpfile, '--graph=/dev/stdout', '-o', '/dev/null']);
+    // Spawn bison process and input parser data to it
+    const spawn = require('child_process').spawn;
+    const parser = spawn('bison', ['tmp/parser.y', '--graph=/dev/stdout', '-o', '/dev/null']);
 
-  // Create buffers for stdout and stderr data
-  stdoutdata = '';
-  stderrdata = '';
+    // Create buffers for stdout and stderr data
+    stdoutdata = '';
+    stderrdata = '';
 
-  // Append stdout and stderr data to buffers
-  parser.stdout.on('data', (data) => { stdoutdata += data; });
-  parser.stderr.on('data', (data) => { stderrdata += data; });
-  
-  // On completion, return results if error in lexing
-  if (parser.stderrdata != '') {
+    // Append stdout and stderr data to buffers
+    parser.stdout.on('data', (data) => { stdoutdata += data; });
+    parser.stderr.on('data', (data) => { stderrdata += data; });
+    
+    // On completion, return results
     parser.on('close', (code) => {
       res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
     });
-  }
+  });
 });
 
 
 // Process AST requests
 app.post('/ast', function(req, res) {
+  // Write data to temp file
+  fs.writeFile('tmp/parser.y', req.body['parser'], function(err) {
+    // Report errors
+    if (err) return console.log(err);
 
-  // LEXER
+    // Write data to temp file
+    fs.writeFile('tmp/lexer.l', req.body['lexer'], function(err) {
+      // Report errors
+      if (err) return console.log(err);
 
-  // Spawn reflex process and input lexer data to it
-  const spawn = require('child_process').spawn;
-  const lexer = spawn('reflex', []);
-  lexer.stdin.end(req.body['lexer']);
+      // Write data to temp file
+      fs.writeFile('tmp/ast.c', req.body['ast'], function(err) {
+        // Report errors
+        if (err) return console.log(err);
 
-  // Create buffers for stdout and stderr data
-  stdoutdata = '';
-  stderrdata = '';
+        // Run build script
+        require('child_process').exec('./build_ast.sh', (err, stdout, stderr) => {
+          // Report errors
+          if (err) {
+            res.json({'code': 1, 'stdout': '', 'stderr': err.toString()});
+            return;
+          }
 
-  // Append stdout and stderr data to buffers
-  lexer.stdout.on('data', (data) => { stdoutdata += data; });
-  lexer.stderr.on('data', (data) => { stderrdata += data; });
-  
-  // On completion, return results
-  lexer.on('close', (code) => {
-    if (code != 0) res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
+          // On completion, return results
+          res.json({'code': 0, 'stdout': stdout, 'stderr': convert.toHtml(stderr)});
+        });
+      });
+    });
   });
+});
 
-  // PARSER
 
-  // Write parser data to temp file
-  tmpfile = tempy.file({extension: 'tab.c'});
-  fs.writeFile(tmpfile, req.body['parser'], function(err) { if(err) return console.log(err); });
-
-  // Spawn bison process and input parser data to it
-  const spawn = require('child_process').spawn;
-  const parser = spawn('bison', [tmpfile]);
-
-  // Create buffers for stdout and stderr data
-  stdoutdata = '';
-  stderrdata = '';
-
-  // Append stdout and stderr data to buffers
-  parser.stdout.on('data', (data) => { stdoutdata += data; });
-  parser.stderr.on('data', (data) => { stderrdata += data; });
-  
-  // On completion, return results if error in lexing
-  if (parser.stderrdata != '') {
-    parser.on('close', (code) => {
-      if (code != 0) res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
-    });
-  }
-
-  // AST
-
-  // Write parser data to temp file
-  tmpfile = tempy.file({extension: 'tab.c'});
-  fs.writeFile(tmpfile, req.body['parser'], function(err) { if(err) return console.log(err); });
-
-  // Spawn bison process and input parser data to it
-  const spawn = require('child_process').spawn;
-  const ast = spawn('gcc', ['lex.yy.cpp', 'y.tab.c', tmpfile]);
+// Process AST input requests
+app.post('/astinput', function(req, res) {
+  // Spawn reflex process and input lexer data to it
+  const exec = require('child_process').exec;
+  const astinput = exec('./tmp/ast.exe', []);
+  astinput.stdin.end(req.body['astinput']);
 
   // Create buffers for stdout and stderr data
   stdoutdata = '';
   stderrdata = '';
 
   // Append stdout and stderr data to buffers
-  ast.stdout.on('data', (data) => { stdoutdata += data; });
-  ast.stderr.on('data', (data) => { stderrdata += data; });
+  astinput.stdout.on('data', (data) => { stdoutdata += data; });
+  astinput.stderr.on('data', (data) => { stderrdata += data; });
   
   // On completion, return results
-  if (ast.stderrdata != '') {
-    ast.on('close', (code) => {
-      res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
+  astinput.on('close', (code) => {
+    res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
+  });
+});
+
+// Process interpreter requests
+app.post('/interpreter', function(req, res) {
+  // Write data to temp file
+  fs.writeFile('tmp/parser.y', req.body['parser'], function(err) {
+    // Report errors
+    if (err) return console.log(err);
+
+    // Write data to temp file
+    fs.writeFile('tmp/lexer.l', req.body['lexer'], function(err) {
+      // Report errors
+      if (err) return console.log(err);
+
+      // Write data to temp file
+      fs.writeFile('tmp/interpreter.c', req.body['interpreter'], function(err) {
+        // Report errors
+        if (err) return console.log(err);
+
+        // Run build script
+        require('child_process').exec('./build_interp.sh', (err, stdout, stderr) => {
+          // Report errors
+          if (err) {
+            res.json({'code': 1, 'stdout': '', 'stderr': err.toString()});
+            return;
+          }
+
+          // On completion, return results
+          res.json({'code': 0, 'stdout': stdout, 'stderr': convert.toHtml(stderr)});
+        });
+      });
     });
-  }
+  });
+});
+
+
+// Process AST input requests
+app.post('/interpreterinput', function(req, res) {
+  // Spawn reflex process and input lexer data to it
+  const exec = require('child_process').exec;
+  const interpreterinput = exec('./tmp/interpreter.exe', []);
+  interpreterinput.stdin.end(req.body['interpreterinput']);
+
+  // Create buffers for stdout and stderr data
+  stdoutdata = '';
+  stderrdata = '';
+
+  // Append stdout and stderr data to buffers
+  interpreterinput.stdout.on('data', (data) => { stdoutdata += data; });
+  interpreterinput.stderr.on('data', (data) => { stderrdata += data; });
+  
+  // On completion, return results
+  interpreterinput.on('close', (code) => {
+    res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
+  });
 });
