@@ -138,20 +138,20 @@ app.post('/ast', function(req, res) {
 
   // Spawn bison process and input parser data to it
   const spawn = require('child_process').spawn;
-  const parser = spawn('gcc', ['lex.yy.cpp', 'y.tab.c', tmpfile]);
+  const ast = spawn('gcc', ['lex.yy.cpp', 'y.tab.c', tmpfile]);
 
   // Create buffers for stdout and stderr data
   stdoutdata = '';
   stderrdata = '';
 
   // Append stdout and stderr data to buffers
-  parser.stdout.on('data', (data) => { stdoutdata += data; });
-  parser.stderr.on('data', (data) => { stderrdata += data; });
+  ast.stdout.on('data', (data) => { stdoutdata += data; });
+  ast.stderr.on('data', (data) => { stderrdata += data; });
   
-  // On completion, return results if error in lexing
-  if (parser.stderrdata != '') {
-    parser.on('close', (code) => {
-      if (code != 0) res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
+  // On completion, return results
+  if (ast.stderrdata != '') {
+    ast.on('close', (code) => {
+      res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
     });
   }
 });
