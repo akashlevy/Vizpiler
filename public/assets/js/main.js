@@ -50,8 +50,10 @@ function openTab(evt, tabName) {
     parsereditor.refresh();
     lexerinputeditor.refresh();
 
-    // Refresh graphs
+    // Refresh graphs and remove titles
     try { panZoomLex = svgPanZoom('#LexerVisualGraph > svg', {minZoom: 0.1, maxZoom: 1}); } catch(err){}
+    try { panZoomLex = svgPanZoom('#ParserVisualGraph > svg', {minZoom: 0.1, maxZoom: 1}); } catch(err){}
+    $("g title").remove();
 }
 
 // Get the element with id="defaultOpen" and click on it
@@ -189,4 +191,24 @@ function stepLexer(graphit) {
 // Run step lexer to the end of the string
 function stepEndLexer() {
     while (lexI < lexText.length) stepLexer(false);
+}
+
+// Handle compiled code
+function parserCompile() {
+    // Show "Compiling..."
+    $("#ParserMessages").html("<b><p style=\"font-size:20px\">Compiling...</p></b>");
+
+    // Make request to server
+    $.post("parser", {"parser": parsereditor.getValue()}, function(result) {
+        // If failure, display failure message
+        if (result["code"] != 0)
+            $("#ParserMessages").html("<b><p style=\"font-size:20px\">Compilation failed!</p></b>" + result["stderr"] + "<br>" + result["stdout"]);
+        // If success, display "Success!" and render/process graph
+        else {
+            $("#ParserMessages").html("<b><p style=\"font-size:20px\">Success!</p></b>Go to the next tab to see the FSM.");
+            parseGraph = graphlibDot.read(result["stdout"])
+            image = Viz(result["stdout"]);
+            $("#ParserVisualGraph").html(image);
+        }
+    });
 }

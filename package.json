@@ -7,10 +7,11 @@
     "example": "examples"
   },
   "dependencies": {
-    "body-parser": "^1.17.1",
     "ansi-to-html": "^0.6.0",
+    "body-parser": "^1.17.1",
     "express": "^4.13.3",
-    "graphlib-dot": "^0.6.2"
+    "graphlib-dot": "^0.6.2",
+    "tempy": "^0.1.0"
   },
   "devDependencies": {},
   "scripts": {

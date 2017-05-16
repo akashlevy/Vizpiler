@@ -1,0 +1,25 @@
+digraph AST {
+"0x7fff553c4f98" [label="print"];
+"0x7fff553c4f98"->"0x7fbfdad00170";
+"0x7fbfdad00170" [label="-"];
+"0x7fbfdad00170"->"0x7fbfdad00150";
+"0x7fbfdad00170"->"0x7fbfdad00158";
+"0x7fbfdad00150" [label="+"];
+"0x7fbfdad00150"->"0x7fbfdad00110";
+"0x7fbfdad00150"->"0x7fbfdad00118";
+"0x7fbfdad00110" [label="+"];
+"0x7fbfdad00110"->"0x7fbfdad00050";
+"0x7fbfdad00110"->"0x7fbfdad00058";
+"0x7fbfdad00050" [label="NUM(5)"];
+"0x7fbfdad00058" [label="NUM(5)"];
+"0x7fbfdad00118" [label="/"];
+"0x7fbfdad00118"->"0x7fbfdad000f0";
+"0x7fbfdad00118"->"0x7fbfdad000f8";
+"0x7fbfdad000f0" [label="*"];
+"0x7fbfdad000f0"->"0x7fbfdad000b0";
+"0x7fbfdad000f0"->"0x7fbfdad000b8";
+"0x7fbfdad000b0" [label="NUM(10)"];
+"0x7fbfdad000b8" [label="NUM(6)"];
+"0x7fbfdad000f8" [label="NUM(2)"];
+"0x7fbfdad00158" [label="NUM(1)"];
+}

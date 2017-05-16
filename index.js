@@ -3,6 +3,11 @@ var express = require('express');
 var app = express();
 
 
+// For temporary files
+var fs = require('fs');
+var tempy = require('tempy');
+
+
 // Use ANSI color code to HTML converter for stderr
 var Convert = require('ansi-to-html');
 var convert = new Convert();
@@ -47,4 +52,30 @@ app.post('/lexer', function(req, res) {
   lexer.on('close', (code) => {
     res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
   });
+});
+
+// Process parser requests
+app.post('/parser', function(req, res) {
+  // Write parser data to temp file
+  tmpfile = tempy.file({extension: 'tab.c'});
+  fs.writeFile(tmpfile, req.body['parser'], function(err) { if(err) return console.log(err); });
+
+  // Spawn bison process and input parser data to it
+  const spawn = require('child_process').spawn;
+  const parser = spawn('bison', [tmpfile, '--graph=/dev/stdout', '-o', '/dev/null']);
+
+  // Create buffers for stdout and stderr data
+  stdoutdata = '';
+  stderrdata = '';
+
+  // Append stdout and stderr data to buffers
+  parser.stdout.on('data', (data) => { stdoutdata += data; });
+  parser.stderr.on('data', (data) => { stderrdata += data; });
+  
+  // On completion, return results if error in lexing
+  if (parser.stderrdata != '') {
+    parser.on('close', (code) => {
+      res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
+    });
+  }
 });

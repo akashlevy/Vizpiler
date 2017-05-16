@@ -33,12 +33,71 @@
           <button class="tablinks" onclick="openTab(event, 'ParserTheory')">Parser Theory</button>
           <button class="tablinks" onclick="openTab(event, 'ParserCode')">Parser Code</button>
           <button class="tablinks" onclick="openTab(event, 'ParserVisual')">Parser Visual</button>
+          <button class="tablinks" onclick="openTab(event, 'ASTCode')">AST Code</button>
           <button class="tablinks" onclick="openTab(event, 'ASTVisual')">AST Visual</button>
           <button class="tablinks" onclick="openTab(event, 'Interpreter')">Interpreter</button>
         </div>
         <div id="LexerCode" class="codecontent" style="overflow: hidden">
           <div style="width:65%; height: 100%; float:left; overflow:scroll">
             <textarea id="lexercode">
+%{
+#include <stdlib.h>
+#include "calc3.h"
+#include "y.tab.h"
+void yyerror(char *);
+%}
+
+%%
+
+[a-z]       { 
+                yylval.sIndex = *yytext - 'a';
+                return VARIABLE;
+            }
+
+0           {
+                yylval.iValue = atoi(yytext);
+                return INTEGER;
+            }
+
+[1-9][0-9]* {
+                yylval.iValue = atoi(yytext);
+                return INTEGER;
+            }
+
+[-()<>=+*/;{}.] {
+                return *yytext;
+             }
+
+">="            return GE;
+"<="            return LE;
+"=="            return EQ;
+"!="            return NE;
+"while"         return WHILE;
+"if"            return IF;
+"else"          return ELSE;
+"print"         return PRINT;
+
+[ \t\n]+        ;       /* ignore whitespace */
+
+.               yyerror("Unknown character");
+
+%%
+
+int yywrap(void) {
+    return 1;
+}</textarea>
+          </div>
+          <div id="LexerCompile" class="compilemsgcontent" style="height: 100%; width:35%; float:left">
+            <button onclick="stopLexing(); lexerCompile();" style="width:100%">Compile</button>
+            <br><br>
+            <div id="LexerMessages" style="overflow-y:scroll; height: 100%">
+            Enter the <i>flex</i> code you want to visualize and then compile it!
+            </div>
+          </div>
+        </div>
+        <div id="ASTCode" class="codecontent" style="overflow: hidden">
+          <div style="width:65%; height: 100%; float:left; overflow:scroll">
+            <textarea id="astcode">
 %{
 #include <stdlib.h>
 #include "calc3.h"
@@ -269,9 +328,9 @@ int main(void) {
 }</textarea>
           </div>
           <div id="ParserCompile" class="compilemsgcontent" style="height: 100%; width:35%; float:left">
-            <button onclick="stopParsing(); parseCompile();" style="width:100%">Compile</button>
+            <button onclick="/*stopParsing();*/ parserCompile();" style="width:100%">Compile</button>
             <br><br>
-            <div id="LexerMessages" style="overflow-y:scroll; height: 100%">
+            <div id="ParserMessages" style="overflow-y:scroll; height: 100%">
             Enter the <i>bison</i> code you want to visualize and then compile it!
             </div>
           </div>
@@ -292,7 +351,20 @@ int main(void) {
           </div>
         </div>
         <div id="ParserVisual" class="tabcontent">
-          <img style="height: 100%" src="https://www.gnu.org/software/bison/manual/html_node/figs/example.png"/>
+          <div id="ParserVisualGraph" style="float: left; width: 100%; height: 100%; outline: #555555 dotted; overflow:hidden"></div>
+          <!--<div id="ParserVisualGraph" style="float: left; width: 65%; height: 100%; outline: #555555 dotted; overflow:hidden"></div>
+          <div id="ParserInputCode" style="float: top; overflow: hidden; height: 50%; padding: 5px 10px; outline: #555555 dotted;">Input your test code here:
+            <div style="display: block; padding-bottom: 30px; height: 100%"><textarea id="parserinput">a = 5+120</textarea></div>
+            <div style="top: 0; left: 0; height: 100%"></div>
+          </div>
+          <div style="word-wrap: break-word; word-wrap: break-all; float: top; overflow: scroll; height: 50%; padding: 10px 10px; outline: #555555 dotted;">
+            <button id="startParseBut" onclick="startParsing();" style="width:33.33%; float:left;" disabled="true">Start Parsing</button>
+            <button id="stepParseBut" onclick="stepParser(true);" style="width:33.33%; float:left;" disabled="true">Step Next</button>
+            <button id="stepEndParseBut" onclick="stepEndParser();" style="width:33.33%; float:top;" disabled="true">Step to End</button>
+            <br>
+            <div id="parsingOutput"></div>
+            <div id="parsingCodeOutput"></div>
+          </div>-->
         </div>
         <div id="ASTVisual" class="tabcontent">
           <img style="width: 100%" src="https://i.stack.imgur.com/AYA3S.png"/>
