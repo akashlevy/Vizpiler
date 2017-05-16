@@ -64,19 +64,20 @@ app.post('/parser', function(req, res) {
 
     // Spawn bison process and input parser data to it
     const spawn = require('child_process').spawn;
-    const parser = spawn('bison', ['tmp/parser.y', '--graph=/dev/stdout', '-o', '/dev/null']);
+    const parser = spawn('bison', ['tmp/parser.y', '--graph=tmp/parse_graph.dot', '-o', '/dev/null']);
 
     // Create buffers for stdout and stderr data
-    stdoutdata = '';
     stderrdata = '';
 
     // Append stdout and stderr data to buffers
-    parser.stdout.on('data', (data) => { stdoutdata += data; });
     parser.stderr.on('data', (data) => { stderrdata += data; });
     
     // On completion, return results
     parser.on('close', (code) => {
-      res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
+      fs.readFile('tmp/parse_graph.dot', 'utf8', function (err, data) {
+        if (err) console.log(err);
+        res.json({'code': code, 'stdout': data, 'stderr': convert.toHtml(stderrdata)});
+      });
     });
   });
 });
