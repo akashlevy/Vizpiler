@@ -253,3 +253,7 @@ paket-files/
 
 # Stdout graph
 stdout.gv
+
+# Executables and object files
+*.exe
+*.o
