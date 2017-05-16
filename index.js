@@ -138,7 +138,7 @@ app.post('/ast', function(req, res) {
 
   // Spawn bison process and input parser data to it
   const spawn = require('child_process').spawn;
-  const parser = spawn('emcc', ['lex.yy.cpp', 'y.tab.c', tmpfile]);
+  const parser = spawn('gcc', ['lex.yy.cpp', 'y.tab.c', tmpfile]);
 
   // Create buffers for stdout and stderr data
   stdoutdata = '';

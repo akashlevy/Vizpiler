@@ -1,4 +1,1 @@
 bison
-build-essential
-cmake
-emscripten
