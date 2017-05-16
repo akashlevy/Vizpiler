@@ -54,6 +54,7 @@ app.post('/lexer', function(req, res) {
   });
 });
 
+
 // Process parser requests
 app.post('/parser', function(req, res) {
   // Write parser data to temp file
@@ -76,6 +77,81 @@ app.post('/parser', function(req, res) {
   if (parser.stderrdata != '') {
     parser.on('close', (code) => {
       res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
+    });
+  }
+});
+
+
+// Process AST requests
+app.post('/ast', function(req, res) {
+
+  // LEXER
+
+  // Spawn reflex process and input lexer data to it
+  const spawn = require('child_process').spawn;
+  const lexer = spawn('reflex', []);
+  lexer.stdin.end(req.body['lexer']);
+
+  // Create buffers for stdout and stderr data
+  stdoutdata = '';
+  stderrdata = '';
+
+  // Append stdout and stderr data to buffers
+  lexer.stdout.on('data', (data) => { stdoutdata += data; });
+  lexer.stderr.on('data', (data) => { stderrdata += data; });
+  
+  // On completion, return results
+  lexer.on('close', (code) => {
+    if (code != 0) res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
+  });
+
+  // PARSER
+
+  // Write parser data to temp file
+  tmpfile = tempy.file({extension: 'tab.c'});
+  fs.writeFile(tmpfile, req.body['parser'], function(err) { if(err) return console.log(err); });
+
+  // Spawn bison process and input parser data to it
+  const spawn = require('child_process').spawn;
+  const parser = spawn('bison', [tmpfile]);
+
+  // Create buffers for stdout and stderr data
+  stdoutdata = '';
+  stderrdata = '';
+
+  // Append stdout and stderr data to buffers
+  parser.stdout.on('data', (data) => { stdoutdata += data; });
+  parser.stderr.on('data', (data) => { stderrdata += data; });
+  
+  // On completion, return results if error in lexing
+  if (parser.stderrdata != '') {
+    parser.on('close', (code) => {
+      if (code != 0) res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
+    });
+  }
+
+  // AST
+
+  // Write parser data to temp file
+  tmpfile = tempy.file({extension: 'tab.c'});
+  fs.writeFile(tmpfile, req.body['parser'], function(err) { if(err) return console.log(err); });
+
+  // Spawn bison process and input parser data to it
+  const spawn = require('child_process').spawn;
+  const parser = spawn('bison', [tmpfile]);
+
+  // Create buffers for stdout and stderr data
+  stdoutdata = '';
+  stderrdata = '';
+
+  // Append stdout and stderr data to buffers
+  parser.stdout.on('data', (data) => { stdoutdata += data; });
+  parser.stderr.on('data', (data) => { stderrdata += data; });
+  
+  // On completion, return results if error in lexing
+  if (parser.stderrdata != '') {
+    parser.on('close', (code) => {
+      if (code != 0) res.json({'code': code, 'stdout': stdoutdata, 'stderr': convert.toHtml(stderrdata)});
     });
   }
 });

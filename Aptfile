@@ -1,1 +1,3 @@
 bison
+build-essential
+cmake

@@ -35,7 +35,7 @@
           <button class="tablinks" onclick="openTab(event, 'ParserVisual')">Parser Visual</button>
           <button class="tablinks" onclick="openTab(event, 'ASTCode')">AST Code</button>
           <button class="tablinks" onclick="openTab(event, 'ASTVisual')">AST Visual</button>
-          <button class="tablinks" onclick="openTab(event, 'Interpreter')">Interpreter</button>
+          <!--<button class="tablinks" onclick="openTab(event, 'Interpreter')">Interpreter</button>-->
         </div>
         <div id="LexerCode" class="codecontent" style="overflow: hidden">
           <div style="width:65%; height: 100%; float:left; overflow:scroll">
@@ -98,58 +98,126 @@ int yywrap(void) {
         <div id="ASTCode" class="codecontent" style="overflow: hidden">
           <div style="width:65%; height: 100%; float:left; overflow:scroll">
             <textarea id="astcode">
-%{
+#include <stdio.h>
 #include <stdlib.h>
-#include "calc3.h"
-#include "y.tab.h"
-void yyerror(char *);
-%}
+#include <string.h>
 
-%%
+typedef enum { typeCon, typeId, typeOpr } nodeEnum;
 
-[a-z]       { 
-                yylval.sIndex = *yytext - 'a';
-                return VARIABLE;
+/* constants */
+typedef struct {
+    int value;                  /* value of constant */
+} conNodeType;
+
+/* identifiers */
+typedef struct {
+    int i;                      /* subscript to sym array */
+} idNodeType;
+
+/* operators */
+typedef struct {
+    int oper;                   /* operator */
+    int nops;                   /* number of operands */
+    struct nodeTypeTag *op[1];	/* operands, extended at runtime */
+} oprNodeType;
+
+typedef struct nodeTypeTag {
+    nodeEnum type;              /* type of node */
+
+    union {
+        conNodeType con;        /* constants */
+        idNodeType id;          /* identifiers */
+        oprNodeType opr;        /* operators */
+    };
+} nodeType;
+
+#include "y.tab.h"              /* bison-generated parser header */
+
+extern int sym[26];
+
+/* Print label associated with node */
+void printLabel(nodeType **p);
+
+/* Recursive drawing of the syntax tree */
+void exNode(nodeType **p);
+
+/* Main entry point of the manipulation of the syntax tree */
+int ex(nodeType *p) {
+    printf("digraph AST {\n");
+    exNode(&p);
+    printf("}\n");
+    return 0;
+}
+
+/* Recursive drawing of the syntax tree */
+void exNode(nodeType **p) {
+    int k;              /* child number */
+
+    /* Add string label */
+    printLabel(p);
+
+    /* Add arrows to children */
+    for (k = 0; k < (*p)->opr.nops; k++)
+        printf("\"%p\"->\"%p\";\n", (void*)p, (void*)&((*p)->opr.op[k]));
+
+    /* Process children */
+    for (k = 0; k < (*p)->opr.nops; k++)
+        exNode(&((*p)->opr.op[k]));
+}
+
+/* Print label associated with node */
+void printLabel(nodeType **p) {
+    switch((*p)->type) {
+        case typeCon:
+            printf("\"%p\" [label=\"NUM(%d)\"];\n", (void*)p, (*p)->con.value);
+            break;
+        case typeId:
+            printf("\"%p\" [label=\"ID(%c)\"];\n", (void*)p, (*p)->id.i + 'A');
+            break;
+        case typeOpr:
+            switch((*p)->opr.oper){
+                case WHILE:     
+                    printf("\"%p\" [label=\"while\"];\n", (void*)p); break;
+                case IF:        
+                    printf("\"%p\" [label=\"if\"];\n", (void*)p);    break;
+                case PRINT:     
+                    printf("\"%p\" [label=\"print\"];\n", (void*)p); break;
+                case ';':       
+                    printf("\"%p\" [label=\";\"];\n", (void*)p);     break;
+                case '=':       
+                    printf("\"%p\" [label=\"=\"];\n", (void*)p);     break;
+                case UMINUS:    
+                    printf("\"%p\" [label=\"_\"];\n", (void*)p);     break;
+                case '+':       
+                    printf("\"%p\" [label=\"+\"];\n", (void*)p);     break;
+                case '-':       
+                    printf("\"%p\" [label=\"-\"];\n", (void*)p);     break;
+                case '*':       
+                    printf("\"%p\" [label=\"*\"];\n", (void*)p);     break;
+                case '/':       
+                    printf("\"%p\" [label=\"/\"];\n", (void*)p);     break;
+                case '<':       
+                    printf("\"%p\" [label=\"<\"];\n", (void*)p);     break;
+                case '>':       
+                    printf("\"%p\" [label=\">\"];\n", (void*)p);     break;
+                case GE:        
+                    printf("\"%p\" [label=\">=\"];\n", (void*)p);    break;
+                case LE:        
+                    printf("\"%p\" [label=\"<=\"];\n", (void*)p);    break;
+                case NE:        
+                    printf("\"%p\" [label=\"!=\"];\n", (void*)p);    break;
+                case EQ:        
+                    printf("\"%p\" [label=\"==\"];\n", (void*)p);    break;
             }
-
-0           {
-                yylval.iValue = atoi(yytext);
-                return INTEGER;
-            }
-
-[1-9][0-9]* {
-                yylval.iValue = atoi(yytext);
-                return INTEGER;
-            }
-
-[-()<>=+*/;{}.] {
-                return *yytext;
-             }
-
-">="            return GE;
-"<="            return LE;
-"=="            return EQ;
-"!="            return NE;
-"while"         return WHILE;
-"if"            return IF;
-"else"          return ELSE;
-"print"         return PRINT;
-
-[ \t\n]+        ;       /* ignore whitespace */
-
-.               yyerror("Unknown character");
-
-%%
-
-int yywrap(void) {
-    return 1;
+            break;
+    }
 }</textarea>
           </div>
-          <div id="LexerCompile" class="compilemsgcontent" style="height: 100%; width:35%; float:left">
-            <button onclick="stopLexing(); lexerCompile();" style="width:100%">Compile</button>
+          <div id="ASTCompile" class="compilemsgcontent" style="height: 100%; width:35%; float:left">
+            <button onclick="astCompile();" style="width:100%">Compile</button>
             <br><br>
-            <div id="LexerMessages" style="overflow-y:scroll; height: 100%">
-            Enter the <i>flex</i> code you want to visualize and then compile it!
+            <div id="ASTMessages" style="overflow-y:scroll; height: 100%">
+            Enter the <i>C</i> code to generate your DOT graph and then compile it!
             </div>
           </div>
         </div>
@@ -367,11 +435,19 @@ int main(void) {
           </div>-->
         </div>
         <div id="ASTVisual" class="tabcontent">
-          <img style="width: 100%" src="https://i.stack.imgur.com/AYA3S.png"/>
+          <div id="ASTVisualGraph" style="float: left; width: 65%; height: 100%; outline: #555555 dotted; overflow:hidden"></div>
+          <div id="ASTInputCode" style="float: top; overflow: hidden; height: 50%; padding: 5px 10px; outline: #555555 dotted;">Input your test code here:
+            <div style="display: block; padding-bottom: 30px; height: 100%"><textarea id="astinput">a = 5+120</textarea></div>
+            <div style="top: 0; left: 0; height: 100%"></div>
+          </div>
+          <div style="word-wrap: break-word; word-wrap: break-all; float: top; overflow: scroll; height: 50%; padding: 10px 10px; outline: #555555 dotted;">
+            <button id="getASTBut" onclick="getAST();" style="width:33.33%; float:left;" disabled="true">Get AST</button>
+            <div id="astOutput"></div>
+          </div>
         </div>
-        <div id="Interpreter" class="tabcontent">
+        <!--<div id="Interpreter" class="tabcontent">
           Code execution can be done here.
-        </div>
+        </div>-->
         <div id="LexerTheory" class="tabcontent" style="padding: 0px 0px; height: 100%">
           <iframe src="assets/LexingTheory/index.html" style="width:100%; height:100%;" frameborder="0"></iframe>
         </div>

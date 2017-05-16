@@ -25,6 +25,22 @@ var parsereditor = CodeMirror.fromTextArea(parsercode,
     mode: "text/x-c++src",
     theme: "dracula"
 });
+var asteditor = CodeMirror.fromTextArea(astcode,
+{
+    lineNumbers: true,
+    styleActiveLine: true,
+    matchBrackets: true,
+    mode: "text/x-c++src",
+    theme: "dracula"
+});
+var astinputeditor = CodeMirror.fromTextArea(astinput,
+{
+    lineNumbers: true,
+    styleActiveLine: true,
+    matchBrackets: true,
+    mode: "text/x-c++src",
+    theme: "dracula"
+});
 
 // Show and hide tabs
 function openTab(evt, tabName) {
@@ -48,11 +64,14 @@ function openTab(evt, tabName) {
     // Refresh CodeMirror displays
     lexereditor.refresh();
     parsereditor.refresh();
+    asteditor.refresh();
     lexerinputeditor.refresh();
+    astinputeditor.refresh();
 
     // Refresh graphs and remove titles
     try { panZoomLex = svgPanZoom('#LexerVisualGraph > svg', {minZoom: 0.1, maxZoom: 1}); } catch(err){}
     try { panZoomLex = svgPanZoom('#ParserVisualGraph > svg', {minZoom: 0.1, maxZoom: 1}); } catch(err){}
+    try { panZoomLex = svgPanZoom('#ASTVisualGraph > svg', {minZoom: 0.1, maxZoom: 1}); } catch(err){}
     $("g title").remove();
 }
 
@@ -209,6 +228,26 @@ function parserCompile() {
             parseGraph = graphlibDot.read(result["stdout"])
             image = Viz(result["stdout"]);
             $("#ParserVisualGraph").html(image);
+        }
+    });
+}
+
+// Handle compiled code
+function astCompile() {
+    // Show "Compiling..."
+    $("#ASTMessages").html("<b><p style=\"font-size:20px\">Compiling...</p></b>");
+
+    // Make request to server
+    $.post("ast", {"lexer": lexereditor.getValue(), "parser": parsereditor.getValue(), "ast": asteditor.getValue()}, function(result) {
+        // If failure, display failure message
+        if (result["code"] != 0)
+            $("#ASTMessages").html("<b><p style=\"font-size:20px\">Compilation failed!</p></b>" + result["stderr"] + "<br>" + result["stdout"]);
+        // If success, display "Success!" and render/process tree
+        else {
+            $("#ASTMessages").html("<b><p style=\"font-size:20px\">Success!</p></b>Go to the next tab to see the AST.");
+            parseGraph = graphlibDot.read(result["stdout"])
+            image = Viz(result["stdout"]);
+            $("#ASTVisualGraph").html(image);
         }
     });
 }
