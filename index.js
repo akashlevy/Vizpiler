@@ -5,6 +5,7 @@ var app = express();
 
 // For files
 var fs = require('fs');
+if (!fs.existsSync("tmp/")) fs.mkdirSync("tmp/");
 
 
 // Use ANSI color code to HTML converter for stderr
